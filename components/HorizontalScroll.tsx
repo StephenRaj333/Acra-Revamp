@@ -164,36 +164,25 @@ function BrandEllipse({
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function HorizontalScroll() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const activeRef = useRef(0);
-  const sectionRefs = useRef<HTMLDivElement[]>([]);
-  const headingRefs = useRef<HTMLDivElement[]>([]);
-  const tagRefs = useRef<HTMLDivElement[]>([]);
-  const subRefs = useRef<HTMLDivElement[]>([]);
-  const ellipseRefs = useRef<HTMLDivElement[]>([]);
-  const progressRef = useRef<HTMLDivElement>(null);
-  const labelRefs = useRef<HTMLDivElement[]>([]);
+  const containerRef    = useRef<HTMLDivElement>(null);
+  const trackRef        = useRef<HTMLDivElement>(null);
+  const activeRef       = useRef(0);
+  const sectionRefs     = useRef<HTMLDivElement[]>([]);
+  const headingRefs     = useRef<HTMLDivElement[]>([]);
+  const tagRefs         = useRef<HTMLDivElement[]>([]);
+  const subRefs         = useRef<HTMLDivElement[]>([]); 
+  const ellipseRefs     = useRef<HTMLDivElement[]>([]);
+  const progressRef     = useRef<HTMLDivElement>(null);
+  const labelRefs       = useRef<HTMLDivElement[]>([]); 
+  // Parallax depth layers per section (bg orbs, floating shapes)
+  const bgOrbRefs       = useRef<HTMLDivElement[]>([]);
+  const floatARef       = useRef<HTMLDivElement[]>([]);  // slow layer
+  const floatBRef       = useRef<HTMLDivElement[]>([]);  // fast layer
+  const backdropTextRef = useRef<HTMLDivElement[]>([]);  // giant bg word
+  // Cross-section traveler — single element that voyages across all 3 panels
+  const travelerRef     = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // ── import Lenis dynamically (SSR safe) ──────────────────────────────
-    let lenis: InstanceType<typeof import("lenis").default> | null = null;
-
-    import("lenis").then(({ default: Lenis }) => {
-      lenis = new Lenis({
-        duration: 1.4,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-      });
-
-      lenis.on("scroll", ScrollTrigger.update);
-
-      gsap.ticker.add((time) => {
-        lenis?.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
-    });
-
     // ── GSAP horizontal scroll ────────────────────────────────────────────
     const track = trackRef.current!;
     const panels = sectionRefs.current;
@@ -234,6 +223,25 @@ export default function HorizontalScroll() {
           if (progressRef.current) {
             gsap.set(progressRef.current, { scaleX: self.progress });
           }
+          // Traveler illustration morph based on scroll progress
+          if (travelerRef.current) {
+            const p = self.progress;
+            const brand = travelerRef.current.querySelector(".traveler-brand") as HTMLElement;
+            const ux    = travelerRef.current.querySelector(".traveler-ux")    as HTMLElement;
+            const data  = travelerRef.current.querySelector(".traveler-data")  as HTMLElement;
+            if (brand && ux && data) {
+              // Phase 1 (0–0.35): brand visible
+              // Phase 2 (0.3–0.6): crossfade brand→ux
+              // Phase 3 (0.6–1.0): crossfade ux→data
+              const brandO = p < 0.28 ? 1 : p < 0.46 ? 1 - (p - 0.28) / 0.18 : 0;
+              const uxO    = p < 0.30 ? 0 : p < 0.48 ? (p - 0.30) / 0.18 :
+                             p < 0.68 ? 1 : p < 0.84 ? 1 - (p - 0.68) / 0.16 : 0;
+              const dataO  = p < 0.66 ? 0 : p < 0.82 ? (p - 0.66) / 0.16 : 1;
+              gsap.set(brand, { opacity: brandO });
+              gsap.set(ux,    { opacity: uxO });
+              gsap.set(data,  { opacity: dataO });
+            }
+          } 
         },
       },
     });
@@ -244,17 +252,120 @@ export default function HorizontalScroll() {
       ease: "none",
     });
 
+    // ── Cross-section TRAVELER ────────────────────────────────────────────
+    // The traveler starts at left:8vw in the first panel and physically
+    // travels rightward across all three panels, morphing its illustration.
+    // We animate it in viewport-space using the scroll progress.
+    if (travelerRef.current) {
+      // Position: moves from 8vw to (300vw - 8vw) so it covers all panels
+      gsap.to(travelerRef.current, {
+        x: () => totalWidth * 0.28,     // travels 28% of total horizontal distance
+        y: "-=90",                      // arcs upward in the middle, back down at end
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: () => `+=${totalWidth + window.innerWidth}`,
+          scrub: 1.0,
+          containerAnimation: mainTl,
+        },
+      });
+      // Scale pulse: small → big → medium across 3 phases
+      gsap.to(travelerRef.current, {
+        scale: 1.55,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        duration: 3.2,
+      });
+      // Morph colour based on scroll progress (brand-red → ux-blue → data-green)
+      // We tween a CSS variable equivalent by changing box-shadow & opacity of child divs
+    }
+
     // ── Per-panel entrance animations (staggered on scroll) ──────────────
     panels.forEach((panel, i) => {
-      const heading = headingRefs.current[i];
-      const tag = tagRefs.current[i];
-      const sub = subRefs.current[i];
-      const ellipse = ellipseRefs.current[i];
+      const heading  = headingRefs.current[i];
+      const tag      = tagRefs.current[i];
+      const sub      = subRefs.current[i]; 
+      const ellipse  = ellipseRefs.current[i];
+      const bgOrb    = bgOrbRefs.current[i];
+      const floatA   = floatARef.current[i];
+      const floatB   = floatBRef.current[i];
+      const bdText   = backdropTextRef.current[i];
 
-      const enterProgress = i / sections.length;
-      const midProgress = (i + 0.5) / sections.length;
+      // ── Deep parallax: background orb moves very slowly (depth = far)
+      if (bgOrb) {
+        gsap.fromTo(bgOrb,
+          { x: 120 },
+          {
+            x: -120,
+            ease: "none",
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: mainTl,
+              start: "left right",
+              end: "right left",
+              scrub: 2.5,
+            },
+          }
+        );
+      }
 
-      // parallax on ellipse — moves slower than the scroll
+      // ── Mid parallax: floating shape A (medium depth)
+      if (floatA) {
+        gsap.fromTo(floatA,
+          { x: 80, y: 30, rotation: -8 },
+          {
+            x: -80, y: -30, rotation: 12,
+            ease: "none",
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: mainTl,
+              start: "left right",
+              end: "right left",
+              scrub: 1.6,
+            },
+          }
+        );
+      }
+
+      // ── Near parallax: floating shape B (shallow depth, moves fastest)
+      if (floatB) {
+        gsap.fromTo(floatB,
+          { x: 60, y: -20, rotation: 5 },
+          {
+            x: -160, y: 20, rotation: -15,
+            ease: "none",
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: mainTl,
+              start: "left right",
+              end: "right left",
+              scrub: 0.9,
+            },
+          }
+        );
+      }
+
+      // ── Backdrop text parallax (slowest — near-static)
+      if (bdText) {
+        gsap.fromTo(bdText,
+          { x: 60 },
+          {
+            x: -60,
+            ease: "none",
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: mainTl,
+              start: "left right",
+              end: "right left",
+              scrub: 3.5,
+            },
+          }
+        );
+      }
+
+      // parallax on ellipse — moves slightly slower than the scroll
       gsap.to(ellipse, {
         x: -60,
         ease: "none",
@@ -362,8 +473,6 @@ export default function HorizontalScroll() {
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
-      gsap.ticker.remove(() => {});
-      lenis?.destroy();
     };
   }, []);
 
@@ -419,8 +528,109 @@ export default function HorizontalScroll() {
         <div
           ref={trackRef}
           className="flex h-full"
-          style={{ width: `${sections.length * 100}vw` }}
+          style={{ width: `${sections.length * 100}vw`, position: "relative" }}
         >
+          {/* ──────────────────────────────────────────────────────────────────
+              TRAVELER — single element that voyages across all 3 sections.
+              It starts at 8vw from left at mid-height, physically travels
+              rightward while morphing: Brand Seal → UX Cursor → Data Orb.
+              Three layered children, their opacities are GSAP-tween'd.
+          ────────────────────────────────────────────────────────────────── */}
+          <div
+            ref={travelerRef}
+            style={{
+              position: "absolute",
+              left: "6vw",
+              top: "50%",
+              marginTop: -52,
+              width: 104, height: 104,
+              zIndex: 20,
+              pointerEvents: "none",
+              willChange: "transform",
+            }}
+          >
+            {/* Phase 1 — Brand Seal (red diamond stamp) */}
+            <div className="traveler-brand" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="104" height="104" viewBox="0 0 104 104" fill="none">
+                <defs>
+                  <radialGradient id="trBrandG" cx="38%" cy="32%" r="62%">
+                    <stop offset="0%" stopColor="#FF7A55"/>
+                    <stop offset="100%" stopColor="#e63624"/>
+                  </radialGradient>
+                  <filter id="trBrandSh">
+                    <feDropShadow dx="0" dy="6" stdDeviation="12" floodColor="#e63624" floodOpacity="0.55"/>
+                  </filter>
+                </defs>
+                {/* Outer octagon ring */}
+                <polygon points="52,4 80,16 98,40 98,64 80,88 52,100 24,88 6,64 6,40 24,16"
+                  stroke="#e6362455" strokeWidth="1.5" fill="none"/>
+                {/* Diamond gem */}
+                <polygon points="52,18 76,40 52,82 28,40"
+                  fill="url(#trBrandG)" filter="url(#trBrandSh)"/>
+                <polygon points="52,18 64,40 52,54" fill="rgba(255,255,255,0.32)"/>
+                <polygon points="52,18 40,40 52,54" fill="rgba(255,255,255,0.08)"/>
+                {/* Center A */}
+                <text x="52" y="56" textAnchor="middle" fontFamily="Arial Black,sans-serif"
+                  fontWeight="900" fontSize="18" fill="rgba(255,255,255,0.9)" letterSpacing="-1">A</text>
+              </svg>
+            </div>
+
+            {/* Phase 2 — UX Cursor (blue) */}
+            <div className="traveler-ux" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0 }}>
+              <svg width="104" height="104" viewBox="0 0 104 104" fill="none">
+                <defs>
+                  <filter id="trUXSh">
+                    <feDropShadow dx="0" dy="6" stdDeviation="12" floodColor="#1a4fd6" floodOpacity="0.55"/>
+                  </filter>
+                </defs>
+                {/* Screen frame */}
+                <rect x="10" y="14" width="84" height="58" rx="8"
+                  fill="#1a4fd615" stroke="#1a4fd655" strokeWidth="1.5" filter="url(#trUXSh)"/>
+                <rect x="18" y="22" width="68" height="42" rx="4" fill="#1a4fd610"/>
+                {/* UI lines */}
+                <rect x="24" y="28" width="24" height="4" rx="2" fill="#1a4fd655"/>
+                <rect x="24" y="36" width="40" height="3" rx="1.5" fill="#1a4fd630"/>
+                <rect x="24" y="43" width="30" height="3" rx="1.5" fill="#1a4fd620"/>
+                {/* Cursor */}
+                <path d="M62,44 L62,68 L68,62 L74,74 L78,72 L72,60 L80,60 Z"
+                  fill="#1a4fd6cc" stroke="#1a4fd6" strokeWidth="1" strokeLinejoin="round"/>
+                {/* Stand */}
+                <rect x="44" y="72" width="16" height="5" rx="1" fill="#1a4fd640"/>
+                <rect x="36" y="77" width="32" height="3" rx="1.5" fill="#1a4fd635"/>
+              </svg>
+            </div>
+
+            {/* Phase 3 — Data Orb (green network) */}
+            <div className="traveler-data" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0 }}>
+              <svg width="104" height="104" viewBox="0 0 104 104" fill="none">
+                <defs>
+                  <radialGradient id="trDataG" cx="38%" cy="32%" r="62%">
+                    <stop offset="0%" stopColor="#4adeaa"/>
+                    <stop offset="100%" stopColor="#18a363"/>
+                  </radialGradient>
+                  <filter id="trDataSh">
+                    <feDropShadow dx="0" dy="6" stdDeviation="12" floodColor="#18a363" floodOpacity="0.55"/>
+                  </filter>
+                </defs>
+                {/* Outer orbit ring */}
+                <circle cx="52" cy="52" r="46" stroke="#18a36335" strokeWidth="1.5" fill="none"/>
+                <circle cx="52" cy="52" r="32" stroke="#18a36320" strokeWidth="1" fill="none" strokeDasharray="4 6"/>
+                {/* Core orb */}
+                <circle cx="52" cy="52" r="20" fill="url(#trDataG)" filter="url(#trDataSh)"/>
+                <ellipse cx="46" cy="44" rx="7" ry="4" fill="rgba(255,255,255,0.35)" transform="rotate(-20 46 44)"/>
+                {/* Network nodes */}
+                {[[52,6],[98,52],[52,98],[6,52],[82,22],[82,82],[22,82],[22,22]].map(([cx,cy],ni) => (
+                  <circle key={ni} cx={cx} cy={cy} r={ni < 4 ? 4 : 3}
+                    fill="#18a36355" stroke="#18a36388" strokeWidth="1"/>
+                ))}
+                {/* Network connectors */}
+                <line x1="52" y1="32" x2="52" y2="10" stroke="#18a36330" strokeWidth="1"/>
+                <line x1="72" y1="52" x2="94" y2="52" stroke="#18a36330" strokeWidth="1"/>
+                <line x1="52" y1="72" x2="52" y2="94" stroke="#18a36330" strokeWidth="1"/>
+                <line x1="32" y1="52" x2="10" y2="52" stroke="#18a36330" strokeWidth="1"/>
+              </svg>
+            </div>
+          </div>
           {sections.map((section, i) => (
             <div
               key={section.id}
@@ -444,14 +654,139 @@ export default function HorizontalScroll() {
                 }}
               />
 
-              {/* ── Big background number ── */}
+              {/* ── PARALLAX LAYER 1: Large background radial orb (far/slow) ── */}
+              <div
+                ref={(el) => { if (el) bgOrbRefs.current[i] = el; }}
+                className="absolute pointer-events-none"
+                style={{
+                  width: "70vw", height: "70vw",
+                  right: i === 1 ? "-10vw" : "-20vw",
+                  top: i === 1 ? "5vh" : "-15vh",
+                  borderRadius: "50%",
+                  background: `radial-gradient(circle at 40% 40%, ${section.accent}18 0%, transparent 65%)`,
+                  filter: "blur(60px)",
+                  willChange: "transform",
+                }}
+              />
+
+              {/* ── PARALLAX LAYER 2: Section-specific mid floating shape ── */}
+              <div
+                ref={(el) => { if (el) floatARef.current[i] = el; }}
+                className="absolute pointer-events-none"
+                style={{ willChange: "transform",
+                  ...(i === 0 && { // Brand: AKRA seal ring
+                    width: 180, height: 180,
+                    top: "12vh", right: "18vw",
+                    borderRadius: "50%",
+                    border: `2px solid ${section.accent}28`,
+                    boxShadow: `0 0 60px ${section.accent}14`,
+                  }),
+                  ...(i === 1 && { // UX: skewed wireframe card
+                    width: 140, height: 96,
+                    top: "14vh", right: "16vw",
+                    borderRadius: 14,
+                    border: `1.5px solid ${section.accent}30`,
+                    background: `${section.accent}06`,
+                    backdropFilter: "blur(4px)",
+                  }),
+                  ...(i === 2 && { // Data: hexagonal node
+                    width: 100, height: 114,
+                    top: "10vh", right: "20vw",
+                    background: "transparent",
+                  }),
+                }}
+              >
+                {i === 0 && (
+                  // Brand: inner seal ring with AKRA text
+                  <div style={{ position: "absolute", inset: 16, borderRadius: "50%",
+                    border: `1px solid ${section.accent}20`,
+                    display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.32em",
+                      color: `${section.accent}55`, textTransform: "uppercase" }}>AKRA</span>
+                  </div>
+                )}
+                {i === 1 && (
+                  // UX: mini wireframe UI lines inside card
+                  <svg width="140" height="96" viewBox="0 0 140 96" fill="none" style={{ position: "absolute", inset: 0 }}>
+                    <rect x="10" y="10" width="50" height="6" rx="3" fill={`${section.accent}25`}/>
+                    <rect x="10" y="22" width="80" height="3.5" rx="2" fill={`${section.accent}14`}/>
+                    <rect x="10" y="30" width="60" height="3.5" rx="2" fill={`${section.accent}10`}/>
+                    <rect x="10" y="50" width="36" height="22" rx="5" fill={`${section.accent}15`}/>
+                    <rect x="54" y="50" width="36" height="22" rx="5" fill={`${section.accent}10`}/>
+                    <rect x="98" y="50" width="32" height="22" rx="5" fill={`${section.accent}08`}/>
+                  </svg>
+                )}
+                {i === 2 && (
+                  // Data: hexagonal outline SVG
+                  <svg width="100" height="114" viewBox="0 0 100 114" fill="none">
+                    <polygon points="50,4 94,27 94,73 50,96 6,73 6,27"
+                      stroke={`${section.accent}35`} strokeWidth="1.5" fill={`${section.accent}06`}/>
+                    <polygon points="50,22 76,36.5 76,65.5 50,80 24,65.5 24,36.5"
+                      stroke={`${section.accent}20`} strokeWidth="1" fill="none"/>
+                    <circle cx="50" cy="57" r="8" fill={`${section.accent}30`}/>
+                  </svg>
+                )}
+              </div>
+
+              {/* ── PARALLAX LAYER 3: Near floating shape (fastest) ── */}
+              <div
+                ref={(el) => { if (el) floatBRef.current[i] = el; }}
+                className="absolute pointer-events-none"
+                style={{ willChange: "transform",
+                  ...(i === 0 && { // Brand: angled letterpress slash
+                    width: 4, height: 180,
+                    bottom: "15vh", left: "22vw",
+                    background: `linear-gradient(to bottom, transparent, ${section.accent}55, transparent)`,
+                    transform: "rotate(20deg)",
+                  }),
+                  ...(i === 1 && { // UX: cursor SVG
+                    width: 42, height: 52,
+                    bottom: "18vh", left: "16vw",
+                  }),
+                  ...(i === 2 && { // Data: binary float text
+                    fontSize: 11, fontFamily: "monospace", fontWeight: 700,
+                    letterSpacing: "0.12em", lineHeight: 1.7,
+                    bottom: "14vh", left: "14vw",
+                    color: `${section.accent}40`,
+                    userSelect: "none",
+                  }),
+                }}
+              >
+                {i === 1 && (
+                  <svg width="42" height="52" viewBox="0 0 42 52" fill="none">
+                    <path d="M6,6 L6,42 L14,34 L22,50 L27,47 L19,31 L30,31 Z"
+                      fill={`${section.accent}55`} stroke={`${section.accent}88`} strokeWidth="1.2"
+                      strokeLinejoin="round"/>
+                  </svg>
+                )}
+                {i === 2 && "01 10\n10 01\n00 11\n11 00"}
+              </div>
+
+              {/* ── PARALLAX LAYER 0: Giant backdrop word (slowest, deepest) ── */}
+              <div
+                ref={(el) => { if (el) backdropTextRef.current[i] = el; }}
+                className="absolute font-black select-none pointer-events-none"
+                style={{
+                  fontSize: "clamp(14rem, 22vw, 28rem)",
+                  color: "rgba(255,255,255,0.018)",
+                  right: "-6vw", bottom: "-10vh",
+                  lineHeight: 1,
+                  letterSpacing: "-0.08em",
+                  willChange: "transform",
+                }}
+              >
+                {i === 0 ? "BRAND" : i === 1 ? "DESIGN" : "DATA"}
+              </div>
+
+              {/* ── Big background number (kept, slightly more transparent) ── */}
               <div
                 className="absolute font-black select-none pointer-events-none"
                 style={{
-                  fontSize: "clamp(18rem, 28vw, 32rem)",
-                  color: "rgba(255,255,255,0.02)",
-                  right: "-4vw",
-                  bottom: "-8vh",
+                  fontSize: "clamp(14rem, 22vw, 26rem)",
+                  color: "rgba(255,255,255,0.015)",
+                  left: "50%",
+                  top: "50%",
+                  transform: "translate(-50%,-50%)",
                   lineHeight: 1,
                   letterSpacing: "-0.08em",
                 }}

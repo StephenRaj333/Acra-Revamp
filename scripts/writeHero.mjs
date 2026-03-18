@@ -1,4 +1,11 @@
-"use client";
+import { writeFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url)); 
+const out = join(__dirname, "..", "components", "Hero.tsx");
+
+const code = `"use client";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -249,7 +256,7 @@ export default function Hero() {
         {/* Film-grain noise */}
         <div style={{
           position: "absolute", inset: 0, opacity: 0.042,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundImage: \`url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")\`,
           backgroundSize: "220px",
         }}/>
         {/* Radial vignette */}
@@ -535,9 +542,9 @@ export default function Hero() {
                     position: "absolute",
                     width: di === 0 ? 12 : 8, height: di === 0 ? 12 : 8,
                     borderRadius: "50%", background: "#e63624",
-                    boxShadow: `0 0 ${di === 0 ? 24 : 14}px #e63624`,
+                    boxShadow: \`0 0 \${di === 0 ? 24 : 14}px #e63624\`,
                     left: "50%", top: "50%",
-                    transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                    transform: \`translate(calc(-50% + \${x}px), calc(-50% + \${y}px))\`,
                   }}/>
                 );
               })}
@@ -546,11 +553,11 @@ export default function Hero() {
                 const rad = (deg * Math.PI) / 180;
                 const r = 209;
                 return (
-                  <div key={`m${di}`} style={{
+                  <div key={\`m\${di}\`} style={{
                     position: "absolute", width: 5, height: 5, borderRadius: "50%",
                     background: "rgba(255,255,255,0.3)",
                     left: "50%", top: "50%",
-                    transform: `translate(calc(-50% + ${Math.cos(rad) * r}px), calc(-50% + ${Math.sin(rad) * r}px))`,
+                    transform: \`translate(calc(-50% + \${Math.cos(rad) * r}px), calc(-50% + \${Math.sin(rad) * r}px))\`,
                   }}/>
                 );
               })}
@@ -577,7 +584,7 @@ export default function Hero() {
                     color: "#e63624", fontSize: 14, fontWeight: 900, letterSpacing: "0.06em",
                     boxShadow: "0 0 14px rgba(230,54,36,0.2)",
                     left: "50%", top: "50%",
-                    transform: `translate(calc(-50% + ${Math.cos(angle) * r}px), calc(-50% + ${Math.sin(angle) * r}px))`,
+                    transform: \`translate(calc(-50% + \${Math.cos(angle) * r}px), calc(-50% + \${Math.sin(angle) * r}px))\`,
                   }}>{l}</div>
                 );
               })}
@@ -628,7 +635,7 @@ export default function Hero() {
             {ORB_DOTS.map(({ size, glow, ...pos }, di) => (
               <div key={di} style={{
                 position: "absolute", width: size, height: size, borderRadius: "50%",
-                background: "#e63624", boxShadow: `0 0 ${glow}px #e63624`,
+                background: "#e63624", boxShadow: \`0 0 \${glow}px #e63624\`,
                 ...pos,
               } as React.CSSProperties}/>
             ))}
@@ -704,7 +711,7 @@ export default function Hero() {
       </div>
 
       {/* ── Keyframes ────────────────────────────────────────────────────────── */}
-      <style>{`
+      <style>{\`
         @keyframes hero-mouse-dot {
           0%, 100% { transform: translateY(0);    opacity: 1;   }
           60%       { transform: translateY(14px); opacity: 0.1; }
@@ -717,7 +724,11 @@ export default function Hero() {
           from { transform: translateX(0);    }
           to   { transform: translateX(-50%); }
         }
-      `}</style>
+      \`}</style>
     </section>
   );
 }
+`;
+
+writeFileSync(out, code, "utf8");
+console.log("Written:", out);
