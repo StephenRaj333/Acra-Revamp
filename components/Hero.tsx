@@ -43,6 +43,7 @@ export default function Hero() {
   const sepRef       = useRef<HTMLDivElement>(null);
   const subRef       = useRef<HTMLParagraphElement>(null);
   const statsRef     = useRef<HTMLDivElement>(null);
+  const statValueRefs = useRef<(HTMLDivElement | null)[]>([]);
   const ctaRef       = useRef<HTMLDivElement>(null);
   const visualRef    = useRef<HTMLDivElement>(null);
   const orbRef       = useRef<HTMLDivElement>(null);
@@ -114,7 +115,36 @@ export default function Hero() {
 
       // 8. Stats
       tl.fromTo(statsRef.current,
-        { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+        { y: 18, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power3.out",
+          onStart: () => {
+            const statTargets = [
+              { end: 200, suffix: "+" },
+              { end: 8, suffix: " Yrs" },
+              { end: 50, suffix: "+" },
+            ];
+
+            statTargets.forEach((target, i) => {
+              const el = statValueRefs.current[i];
+              if (!el) return;
+
+              const counter = { val: 0 };
+              gsap.to(counter, {
+                val: target.end,
+                duration: 1.15,
+                delay: i * 0.08,
+                ease: "power2.out",
+                onUpdate: () => {
+                  el.textContent = `${Math.round(counter.val)}${target.suffix}`;
+                },
+              });
+            });
+          },
+        },
         "-=0.42"
       );
 
@@ -467,7 +497,7 @@ export default function Hero() {
                 <div style={{
                   fontSize: "clamp(1.7rem, 2.5vw, 2.8rem)", fontWeight: 900,
                   color: "white", letterSpacing: "-0.04em", lineHeight: 1,
-                }}>{s.v}</div>
+                }} ref={(el) => { statValueRefs.current[si] = el; }}>0</div> 
                 <div style={{
                   fontSize: 9.5, fontWeight: 700, letterSpacing: "0.18em",
                   textTransform: "uppercase" as const, color: "rgba(255,255,255,0.26)",
