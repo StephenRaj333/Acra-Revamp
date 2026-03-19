@@ -70,6 +70,7 @@ const ScrollReveal = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const stickyRef = useRef<HTMLDivElement>(null);
     const hexRef = useRef<HTMLDivElement>(null);
+    const parallaxRef = useRef<HTMLDivElement>(null);
     const hexRotRef = useRef(0);
     const curRef = useRef(0);
     const animating = useRef(false);
@@ -118,6 +119,14 @@ const ScrollReveal = () => {
                 if (newIdx !== curRef.current && !animating.current) {
                     transition(curRef.current, newIdx);
                     curRef.current = newIdx;
+                }
+                
+                // Parallax effect: background moves slower than scroll
+                if (parallaxRef.current) {
+                    const parallaxAmount = self.progress * 100; // 0 to 100
+                    gsap.set(parallaxRef.current, {
+                        y: parallaxAmount * 0.3,
+                    });
                 }
             },
         });
@@ -298,16 +307,17 @@ const ScrollReveal = () => {
                             ))}
                         </div>
 
-                        <div className="text-right-content w-1/2">
-                            <div className="title pb-8">
-                                <h2 className="text-4xl text-black font-semibold">My <br /> Storehouse</h2>
+                        <div className="text-right-content w-1/2 pl-8">
+                            <div className="title pb-12">
+                                <h2 className="text-5xl text-black font-bold leading-tight">Our <br /> Services</h2>
                             </div>
 
-                            <div className="flex gap-16 pb-4 text-xs uppercase tracking-wider">
-                                <h4 className="text-gray-600 font-semibold" style={{ flex: 1 }}>Our Services</h4>
+                            <div className="flex gap-16 pb-6 text-xs uppercase tracking-widest font-semibold">
+                                <h4 className="text-gray-400" style={{ flex: 1 }}>Service</h4>
+                                <h4 className="text-gray-400">No.</h4>
                             </div>
 
-                            <div style={{ position: "relative", overflow: "hidden", minHeight: 140, width: "100%" }}>
+                            <div style={{ position: "relative", overflow: "hidden", minHeight: 160, width: "100%" }}>
                                 <AnimatePresence mode="sync">  
                                     <motion.div
                                         key={currentSlide}
@@ -320,28 +330,58 @@ const ScrollReveal = () => {
                                         {SLIDES[currentSlide].products.map((p, ri) => (
                                             <div
                                                 key={ri}
-                                                className="flex items-center gap-6 py-3 border-b border-gray-100"
+                                                className="flex items-center justify-between py-4 mb-2 group cursor-pointer"
+                                                style={{
+                                                    transition: "all 0.3s ease",
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.paddingLeft = "12px";
+                                                    e.currentTarget.style.paddingRight = "12px";
+                                                    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.02)";
+                                                    e.currentTarget.style.borderRadius = "8px";
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.paddingLeft = "0";
+                                                    e.currentTarget.style.paddingRight = "0";
+                                                    e.currentTarget.style.backgroundColor = "transparent";
+                                                    e.currentTarget.style.borderRadius = "0";
+                                                }}
                                             >
-                                                {/* Text */}
+                                                {/* Left: Text */}
                                                 <div style={{ flex: 1 }}>
-                                                    <p className="text-black text-base font-medium">{p.name}</p>
-                                                    {/* <p className="text-black text-base mt-1">{p.hd}</p> */}
+                                                    <p className="text-black text-base font-semibold mb-1">{p.name}</p>
+                                                    <p className="text-gray-500 text-sm">{p.hd}</p>
                                                 </div>
 
-                                                {/* Image */}
-                                                <div style={{ width: 48, height: 48, flexShrink: 0 }}>
+                                                {/* Right: Icon Badge */}
+                                                <div 
+                                                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ml-4"
+                                                    style={{
+                                                        background: `linear-gradient(135deg, ${SLIDES[currentSlide].g0} 0%, ${SLIDES[currentSlide].g1} 100%)`,
+                                                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                                    }}
+                                                >
                                                     <Image
                                                         src={SLIDES[currentSlide].imgs[ri % 3]}
-                                                        width={48}
-                                                        height={48}
+                                                        width={32}
+                                                        height={32}
                                                         alt={p.name}
-                                                        style={{ objectFit: "cover" }}
+                                                        style={{
+                                                            objectFit: "contain",
+                                                            filter: "brightness(0) invert(1) opacity(0.7)",
+                                                        }}
                                                     />
                                                 </div>
 
-                                                {/* Button */}
-                                                <button className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex-shrink-0">
-                                                    <span className="text-black font-semibold text-lg">+</span>
+                                                {/* Plus button */}
+                                                <button 
+                                                    className="flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ml-3 transition-all group-hover:scale-110"
+                                                    style={{
+                                                        background: SLIDES[currentSlide].g0,
+                                                        color: "white",
+                                                    }}
+                                                >
+                                                    <span className="text-xl font-light">+</span>
                                                 </button>
                                             </div>  
                                         ))}
