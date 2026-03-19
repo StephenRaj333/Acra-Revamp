@@ -16,17 +16,12 @@ export default function Navbar() {
   return (
     <nav
       ref={navRef}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5"
-      style={{ background: "transparent" }}
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-2.5 transition-colors duration-300 shadow-md bg-black/45 backdrop-blur-md"
+
     >
       {/* Logo */}
       <div className="flex items-center gap-2">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <polygon points="14,2 26,26 2,26" fill="#e63624" />
-        </svg>
-        <span className="text-white font-bold text-xl tracking-widest uppercase">
-          AKRA
-        </span>
+        <img className="max-w-[120px]" src="https://static.tildacdn.one/tild3531-3636-4133-b766-646636616239/Group_11.png" alt="acra logo" />
       </div>
 
       {/* Hamburger */}

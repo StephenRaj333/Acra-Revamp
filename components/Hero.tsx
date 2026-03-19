@@ -271,7 +271,7 @@ export default function Hero() {
         ref={bigARef}
         style={{
           position: "absolute", right: "-3vw", bottom: "-6vh",
-          fontSize: "clamp(28rem, 52vw, 64rem)",
+          fontSize: "clamp(18rem, 36vw, 42rem)",
           fontWeight: 900, lineHeight: 1, letterSpacing: "-0.08em",
           color: "transparent",
           WebkitTextStroke: "1.5px rgba(230,54,36,0.052)",
@@ -393,7 +393,7 @@ export default function Hero() {
           {/* Badge */}
           <div ref={badgeRef} style={{
             display: "inline-flex", alignItems: "center", gap: 10,
-            marginBottom: 34, opacity: 0,
+            marginBottom: 24, opacity: 0,
             padding: "7px 16px",
             border: "1px solid rgba(230,54,36,0.32)",
             borderRadius: 100,
@@ -412,7 +412,7 @@ export default function Hero() {
           </div>
 
           {/* 3-word headline */}
-          <div style={{ marginBottom: 30 }}>
+          <div style={{ marginBottom: 22 }}>
             {WORDS.map((word, wi) => {
               const refs = [w0Ref, w1Ref, w2Ref];
               return (
@@ -421,7 +421,7 @@ export default function Hero() {
                     ref={refs[wi]}
                     style={{
                       display: "block",
-                      fontSize: "clamp(4rem, 9.2vw, 11rem)",
+                      fontSize: "clamp(2.8rem, 6vw, 6.5rem)",
                       fontWeight: 900,
                       letterSpacing: "-0.04em",
                       lineHeight: 0.92,
@@ -437,7 +437,7 @@ export default function Hero() {
 
           {/* Separator */}
           <div ref={sepRef} style={{
-            height: 1, background: "rgba(255,255,255,0.1)", marginBottom: 26,
+            height: 1, background: "rgba(255,255,255,0.1)", marginBottom: 20,
             transformOrigin: "left center",
           }}/>
 
@@ -445,7 +445,7 @@ export default function Hero() {
           <p ref={subRef} style={{
             fontSize: "clamp(0.87rem, 1.15vw, 1rem)",
             color: "rgba(255,255,255,0.42)",
-            lineHeight: 1.85, maxWidth: 430, marginBottom: 34,
+            lineHeight: 1.85, maxWidth: 430, marginBottom: 24,
             opacity: 0,
           }}>
             Strategy, design and intelligence — all under one roof.
@@ -454,7 +454,7 @@ export default function Hero() {
           </p>
 
           {/* Stats */}
-          <div ref={statsRef} style={{ display: "flex", gap: 0, marginBottom: 42, opacity: 0 }}>
+          <div ref={statsRef} style={{ display: "flex", gap: 0, marginBottom: 30, opacity: 0 }}>
             {[
               { v: "200+",  l: "Brands Scaled" },
               { v: "8 Yrs", l: "In Industry"   },
