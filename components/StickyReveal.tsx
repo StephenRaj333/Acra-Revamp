@@ -418,7 +418,7 @@ export default function StickyReveal() {
       gsap.set(nameRefs.current[si],       { opacity: 0, y: 22 });
       gsap.set(tagRefs.current[si],        { opacity: 0 });
       gsap.set(centerIllRefs.current[si],  { opacity: 0, scale: 0.62 });
-      rowRefs.current[si].forEach((el)     => gsap.set(el, { opacity: 0, x: 22 }));
+      rowRefs.current[si].forEach((el)     => gsap.set(el, { opacity: 0, x: 240 }));
     });
     // Hide slide 1 & 2 planet illustrations initially
     planetIllRefs.current.forEach((arm) => {
@@ -444,7 +444,7 @@ export default function StickyReveal() {
       entrance.fromTo(planetRefs.current[ai], { scale: 0.18, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, `-=${ai === 0 ? 0.18 : 0.32}`)
     );
     rowRefs.current[0].forEach((el, i) =>
-      entrance.fromTo(el, { x: 22, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45 }, i === 0 ? "-=0.45" : "-=0.32")
+      entrance.fromTo(el, { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.52, ease: "power3.out" }, i === 0 ? "-=0.45" : "-=0.36")
     );
 
     // ── Idle planet float ────────────────────────────────────────────────
@@ -558,10 +558,15 @@ export default function StickyReveal() {
     gsap.fromTo(nameRefs.current[to], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: d + 0.2 });
     gsap.fromTo(tagRefs.current[to],  { opacity: 0 },        { opacity: 1, duration: 0.4, delay: d + 0.22 });
 
-    // Service rows
-    rowRefs.current[from].forEach((el, i) => gsap.to(el, { opacity: 0, x: -15, duration: 0.2 + i * 0.04 }));
+    // Service rows — slide exit LEFT, slide enter from RIGHT
+    rowRefs.current[from].forEach((el, i) =>
+      gsap.to(el, { x: -220, opacity: 0, duration: 0.28, ease: "power3.in", delay: i * 0.045 })
+    );
     rowRefs.current[to].forEach((el, i) =>
-      gsap.fromTo(el, { opacity: 0, x: 22 }, { opacity: 1, x: 0, duration: 0.46, ease: "power2.out", delay: d + 0.3 + i * 0.08 })
+      gsap.fromTo(el,
+        { x: 220, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.52, ease: "power3.out", delay: d + 0.18 + i * 0.08 }
+      )
     );
 
     // Right panel flash
@@ -807,7 +812,7 @@ export default function StickyReveal() {
               <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.18em", color: "#B0B0B0" }}>No.</span>
             </div>
 
-            <div style={{ position: "relative", flex: 1 }}>
+            <div style={{ position: "relative", flex: 1, overflow: "hidden" }}>
               {SLIDES.map((slide, si) => (
                 <div key={si} style={{ position: "absolute", top: 0, left: 0, right: 0 }}>
                   {slide.services.map((svc, ri) => (

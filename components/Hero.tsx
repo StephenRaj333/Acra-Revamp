@@ -14,9 +14,9 @@ const CAPS = [
 // ─── Headline words config ────────────────────────────────────────────────────
 type WordCfg = { text: string; color: string; stroke?: string };
 const WORDS: WordCfg[] = [
-  { text: "FUTURE",  color: "rgba(255,255,255,0.92)" },
-  { text: "READY.",  color: "#e63624" },
-  { text: "BRANDS.", color: "transparent", stroke: "1.5px rgba(255,255,255,0.5)" },
+  { text: "Together , we",  color: "rgba(255,255,255,0.92)" },
+  { text: "scale",  color: "#e63624" },
+  { text: "New Heights", color: "transparent", stroke: "1.5px rgba(255,255,255,0.5)" },
 ];
 
 // ─── Orbital dot positions ─────────────────────────────────────────────────────
@@ -388,12 +388,13 @@ export default function Hero() {
       }}>
 
         {/* LEFT — Content */}
-        <div ref={contentRef} style={{ flex: "0 0 auto", width: "min(52vw, 660px)", willChange: "transform, opacity" }}>
+        <div ref={contentRef} style={{ flex: "0 0 auto", marginTop: '5vw', width: "min(52vw, 660px)", willChange: "transform, opacity" }}>
 
           {/* Badge */}
           <div ref={badgeRef} style={{
             display: "inline-flex", alignItems: "center", gap: 10,
-            marginBottom: 24, opacity: 0,
+            marginTop: 16,
+            marginBottom: 8, opacity: 0,
             padding: "7px 16px",
             border: "1px solid rgba(230,54,36,0.32)",
             borderRadius: 100,
@@ -416,7 +417,7 @@ export default function Hero() {
             {WORDS.map((word, wi) => {
               const refs = [w0Ref, w1Ref, w2Ref];
               return (
-                <div key={wi} style={{ overflow: "hidden", lineHeight: 0.88, marginBottom: 5 }}>
+                <div key={wi} style={{ overflow: "hidden", lineHeight: 'normal', marginBottom: 5 }}>
                   <span
                     ref={refs[wi]}
                     style={{
@@ -424,7 +425,7 @@ export default function Hero() {
                       fontSize: "clamp(2.8rem, 6vw, 6.5rem)",
                       fontWeight: 900,
                       letterSpacing: "-0.04em",
-                      lineHeight: 0.92,
+                      lineHeight: 'normal',
                       willChange: "transform",
                       color: word.color,
                       ...(word.stroke ? { WebkitTextStroke: word.stroke } : {}),
@@ -448,9 +449,7 @@ export default function Hero() {
             lineHeight: 1.85, maxWidth: 430, marginBottom: 24,
             opacity: 0,
           }}>
-            Strategy, design and intelligence — all under one roof.
-            AKRA helps ambitious companies build unforgettable brands
-            and future-proof digital products.
+            We bring together brilliant thinkers who understand business, tech, and marketing to help your company reach higher and grow stronger.
           </p>
 
           {/* Stats */}
@@ -476,38 +475,6 @@ export default function Hero() {
                 }}>{s.l}</div>
               </div>
             ))}
-          </div>
-
-          {/* CTAs */}
-          <div ref={ctaRef} style={{ display: "flex", gap: 14, alignItems: "center", opacity: 0 }}>
-            <button style={{
-              display: "inline-flex", alignItems: "center", gap: 11,
-              padding: "14px 32px",
-              background: "#e63624", border: "none", borderRadius: 100,
-              color: "white", fontSize: 11, fontWeight: 800,
-              letterSpacing: "0.22em", textTransform: "uppercase" as const,
-              cursor: "pointer",
-              boxShadow: "0 8px 44px rgba(230,54,36,0.52), 0 2px 12px rgba(0,0,0,0.4)",
-              transition: "transform 0.2s ease, box-shadow 0.2s ease",
-            }}>
-              Start Journey
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M1 6.5h11M7.5 2l4.5 4.5L7.5 11" stroke="white" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            <button style={{
-              padding: "14px 28px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              borderRadius: 100,
-              color: "rgba(255,255,255,0.6)",
-              fontSize: 11, fontWeight: 700,
-              letterSpacing: "0.22em", textTransform: "uppercase" as const,
-              cursor: "pointer", backdropFilter: "blur(8px)",
-              transition: "all 0.2s ease",
-            }}>
-              Our Work
-            </button>
           </div>
         </div>
 
@@ -642,24 +609,7 @@ export default function Hero() {
         display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
         zIndex: 20,
       }}>
-        {/* Mouse icon */}
-        <div style={{
-          width: 24, height: 38,
-          border: "1.5px solid rgba(255,255,255,0.22)",
-          borderRadius: 14, position: "relative",
-          display: "flex", justifyContent: "center", paddingTop: 5,
-          overflow: "hidden",
-        }}>
-          <div style={{
-            width: 3, height: 8, borderRadius: 2,
-            background: "rgba(255,255,255,0.75)",
-            animation: "hero-mouse-dot 1.7s ease-in-out infinite",
-          }}/>
-        </div>
-        <span style={{
-          fontSize: 8.5, fontWeight: 700, letterSpacing: "0.35em",
-          textTransform: "uppercase" as const, color: "rgba(255,255,255,0.22)",
-        }}>SCROLL</span>
+        
       </div>
 
       {/* ── Bottom capability marquee ─────────────────────────────────────────── */}
@@ -692,15 +642,6 @@ export default function Hero() {
             </span>
           ))}
         </div>
-      </div>
-
-      {/* Coordinate flavour text — bottom left */}
-      <div style={{
-        position: "absolute", bottom: 50, left: "8.5vw",
-        fontSize: 9, fontFamily: "monospace", color: "rgba(255,255,255,0.18)",
-        letterSpacing: "0.12em", zIndex: 20,
-      }}>
-        37.7749° N &nbsp;/&nbsp; 122.4194° W
       </div>
 
       {/* ── Keyframes ────────────────────────────────────────────────────────── */}
