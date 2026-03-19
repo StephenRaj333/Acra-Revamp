@@ -126,7 +126,7 @@ const ScrollReveal = () => {
             if (!arm) return;
             const curArmRot = (gsap.getProperty(arm, "rotation") as number) || BASE_ANGLES[ai];
             tl.to(arm, {
-                rotation: curArmRot + 360,
+                rotation: curArmRot + 120, 
                 duration: ORBIT_DUR,
                 ease: "power2.inOut",
                 overwrite: true,
@@ -136,7 +136,7 @@ const ScrollReveal = () => {
             if (counterRefs.current[ai]) {
                 const curCounterRot = (gsap.getProperty(counterRefs.current[ai], "rotation") as number) || -BASE_ANGLES[ai];
                 tl.to(counterRefs.current[ai], {
-                    rotation: curCounterRot - 360, 
+                    rotation: curCounterRot - 120, 
                     duration: ORBIT_DUR,
                     ease: "power2.inOut",
                     overwrite: true,
@@ -144,21 +144,21 @@ const ScrollReveal = () => {
             }
         });
 
-        // 2. Crossfade images during orbit
-        const fadeDelay = ORBIT_DUR * 0.35;
-        const fadeDur = ORBIT_DUR * 0.4;
+// 2. Crossfade images during orbit - very smooth opacity transition
+        const fadeDelay = ORBIT_DUR * 0.2; 
+        const fadeDur = ORBIT_DUR * 0.2; 
         imgRefs.current.forEach((armImgs) => {
             if (armImgs[from]) {
                 tl.to(armImgs[from], {
                     opacity: 0,
                     duration: fadeDur,
-                    ease: "power2.in",
+                    ease: "sine.inOut",
                 }, fadeDelay);
             }
             if (armImgs[to]) {
                 tl.fromTo(armImgs[to],
                     { opacity: 0 },
-                    { opacity: 1, duration: fadeDur, ease: "power2.out" },
+                    { opacity: 1, duration: fadeDur, ease: "sine.inOut" }, 
                     fadeDelay
                 );  
             }
