@@ -1,6 +1,7 @@
 ﻿'use client';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -8,34 +9,54 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SLIDES = [
     {
-        headline: ["Herbs", "Pod"],
+        headline: ["Brand", "Design"],
         products: [
-            { name: "Herbs Pod", hd: "110 Ã— 100" },
-            { name: "Golden Pack", hd: "100 Ã— 100" },
-            { name: "Outdoor Light", hd: "150 Ã— 100" },
+            { name: "Logo Systems", hd: "110 × 110" },
+            { name: "Visual Identity", hd: "110 × 110" },
+            { name: "Brand Guidelines", hd: "110 × 110" },
         ],
-        imgs: ["/assets/images/apple.png", "/assets/images/orange.png", "/assets/images/pumpkin.png"],
-        g0: "#B8EDE6", g1: "#5EEAD4", g2: "#0D9488",
+        imgs: [
+            "/assets/images/brand-1.webp",
+            "/assets/images/brand-2.webp",
+            "/assets/images/brand-3.webp",
+        ],
+        g0: "#FFE4E6",
+        g1: "#FB7185",
+        g2: "#BE123C",
     },
+
     {
-        headline: ["Blob", "Sofa"],
+        headline: ["UI/UX", "Design"],
         products: [
-            { name: "Purifier Q2", hd: "110 Ã— 110" },
-            { name: "Copse Combo", hd: "90 Ã— 90" },
-            { name: "Bouncy Prop", hd: "110 Ã— 110" },
+            { name: "Web Interfaces", hd: "110 × 110" },
+            { name: "Mobile Apps", hd: "110 × 110" },
+            { name: "Design Systems", hd: "110 × 110" },
         ],
-        imgs: ["/assets/images/phone.png", "/assets/images/mobile.png", "/assets/images/telephone.png"],
-        g0: "#F7D4C4", g1: "#FF9966", g2: "#E63624",
+        imgs: [
+            "/assets/images/ui.png",
+            "/assets/images/ux.png",
+            "/assets/images/ui-ux.png",
+        ],
+        g0: "#DBEAFE",
+        g1: "#60A5FA",
+        g2: "#1D4ED8",
     },
+
     {
-        headline: ["Sofa", "Cake"],
+        headline: ["AI", "Driven"],
         products: [
-            { name: "Worktop", hd: "110 Ã— 110" },
-            { name: "Couch Capsule", hd: "110 Ã— 110" },
-            { name: "Couch Cake", hd: "110 Ã— 110" },
+            { name: "Data Insights", hd: "110 × 110" },
+            { name: "Automation", hd: "110 × 110" },
+            { name: "Predictive Models", hd: "110 × 110" },
         ],
-        imgs: ["/assets/images/chair-1.png", "/assets/images/chair-2.png", "/assets/images/chair-3.png"],
-        g0: "#E0D0F8", g1: "#C084FC", g2: "#7C3AED",  
+        imgs: [
+            "/assets/images/ai-1.webp",
+            "/assets/images/ai-2.webp",
+            "/assets/images/ai-3.webp",
+        ],
+        g0: "#E9D5FF",
+        g1: "#A855F7",
+        g2: "#6B21A8",
     },
 ];
 
@@ -52,6 +73,7 @@ const ScrollReveal = () => {
     const hexRotRef = useRef(0);
     const curRef = useRef(0);
     const animating = useRef(false);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
     // SVG gradient stops
     const stop0Ref = useRef<SVGStopElement>(null);
@@ -71,14 +93,8 @@ const ScrollReveal = () => {
 
     // headlineRefs[slide]
     const headlineRefs = useRef<(HTMLDivElement | null)[]>([null, null, null]);
-    // rowRefs[slide][row]
-    const rowRefs = useRef<(HTMLDivElement | null)[][]>([
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
-    ]); 
 
-     useEffect(() => {
+    useEffect(() => {
         // Set base angles for arms
         BASE_ANGLES.forEach((angle, ai) => {
             if (armRefs.current[ai]) gsap.set(armRefs.current[ai], { rotation: angle, transformOrigin: "0px 0px" });
@@ -88,7 +104,6 @@ const ScrollReveal = () => {
         // Hide slides 1 & 2 on mount
         [1, 2].forEach((si) => {
             if (headlineRefs.current[si]) gsap.set(headlineRefs.current[si], { opacity: 0, y: 44 });
-            rowRefs.current[si].forEach((el) => { if (el) gsap.set(el, { opacity: 0, x: 200 }); });
             imgRefs.current.forEach((arm) => { if (arm[si]) gsap.set(arm[si], { opacity: 0 }); });
         });
 
@@ -112,7 +127,8 @@ const ScrollReveal = () => {
     }, []);
 
     function transition(from: number, to: number) {
-        animating.current = true; 
+        animating.current = true;
+        setCurrentSlide(to);
         const slide = SLIDES[to];
         const ORBIT_DUR = 1.4;
 
@@ -126,7 +142,7 @@ const ScrollReveal = () => {
             if (!arm) return;
             const curArmRot = (gsap.getProperty(arm, "rotation") as number) || BASE_ANGLES[ai];
             tl.to(arm, {
-                rotation: curArmRot + 120, 
+                rotation: curArmRot + 120,
                 duration: ORBIT_DUR,
                 ease: "power2.inOut",
                 overwrite: true,
@@ -136,7 +152,7 @@ const ScrollReveal = () => {
             if (counterRefs.current[ai]) {
                 const curCounterRot = (gsap.getProperty(counterRefs.current[ai], "rotation") as number) || -BASE_ANGLES[ai];
                 tl.to(counterRefs.current[ai], {
-                    rotation: curCounterRot - 120, 
+                    rotation: curCounterRot - 120,
                     duration: ORBIT_DUR,
                     ease: "power2.inOut",
                     overwrite: true,
@@ -144,23 +160,23 @@ const ScrollReveal = () => {
             }
         });
 
-// 2. Crossfade images during orbit - very smooth opacity transition
-        const fadeDelay = ORBIT_DUR * 0.2; 
-        const fadeDur = ORBIT_DUR * 0.2; 
+        // 2. Crossfade images during orbit
+        const fadeDelay = ORBIT_DUR * 0.35;
+        const fadeDur = ORBIT_DUR * 0.4;
         imgRefs.current.forEach((armImgs) => {
             if (armImgs[from]) {
                 tl.to(armImgs[from], {
                     opacity: 0,
                     duration: fadeDur,
-                    ease: "sine.inOut",
+                    ease: "power2.in",
                 }, fadeDelay);
             }
             if (armImgs[to]) {
                 tl.fromTo(armImgs[to],
                     { opacity: 0 },
-                    { opacity: 1, duration: fadeDur, ease: "sine.inOut" }, 
+                    { opacity: 1, duration: fadeDur, ease: "power2.out" },
                     fadeDelay
-                );  
+                );
             }
         });
 
@@ -185,19 +201,7 @@ const ScrollReveal = () => {
             { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" },
             0.5
         );
-
-        // 6. Product rows
-        rowRefs.current[from].forEach((el, i) => {
-            tl.to(el, { x: -200, opacity: 0, duration: 0.22, ease: "power3.in" }, i * 0.04);
-        });
-        rowRefs.current[to].forEach((el, i) => {
-            tl.fromTo(el,
-                { x: 200, opacity: 0 },
-                { x: 0, opacity: 1, duration: 0.52, ease: "power3.out" }, 
-                0.5 + i * 0.09
-            );
-        });
-    }  
+    }
 
     return (
         <>
@@ -218,7 +222,7 @@ const ScrollReveal = () => {
                                 style={{
                                     position: "absolute",
                                     width: ORBIT_R,
-                                    height: "1px",
+                                    height: "100%",
                                     left: 0, top: 0,
                                     transformOrigin: "0px 0px",
                                 }}
@@ -230,7 +234,7 @@ const ScrollReveal = () => {
                                         position: "absolute",
                                         right: -150, top: -150,
                                         width: "200px", height: "200px",
-                                    }} 
+                                    }}
                                 >
                                     {SLIDES.map((slide, si) => (
                                         <div
@@ -247,7 +251,7 @@ const ScrollReveal = () => {
                                                 width={100} height={100}
                                                 alt=""
                                                 style={{
-                                                    objectFit: "contain", 
+                                                    objectFit: "contain",
                                                     width: "100%", height: "100%",
                                                     filter: "drop-shadow(0 6px 18px rgba(0,0,0,0.22))",
                                                 }}
@@ -269,7 +273,7 @@ const ScrollReveal = () => {
                                         <stop ref={stop1Ref} offset="50%" stopColor={SLIDES[0].g1} />
                                         <stop ref={stop2Ref} offset="100%" stopColor={SLIDES[0].g2} />
                                     </linearGradient>
-                                </defs>  
+                                </defs>
                                 <path
                                     d="M 7.5860 42.9414 L 23.8516 52.1758 C 26.6407 53.7695 29.3126 53.7930 32.1485 52.1758 L 48.4141 42.9414 C 50.5938 41.6992 51.7890 40.4336 51.7890 37.0352 L 51.7890 18.8008 C 51.7890 15.4961 50.5703 14.3008 48.5783 13.1523 L 32.2657 3.8711 C 29.3595 2.2070 26.5704 2.2305 23.7344 3.8711 L 7.4219 13.1523 C 5.4297 14.3008 4.2110 15.4961 4.2110 18.8008 L 4.2110 37.0352 C 4.2110 40.4336 5.4063 41.6992 7.5860 42.9414 Z"
                                     fill="url(#hexGradient)"
@@ -295,28 +299,54 @@ const ScrollReveal = () => {
                         </div>
 
                         <div className="text-right-content w-1/2">
-                            <div className="title">
-                                <h2 className="text-3xl text-black pb-4 font-semibold">My Store <br /> House</h2>
+                            <div className="title pb-8">
+                                <h2 className="text-4xl text-black font-semibold">My <br /> Storehouse</h2>
                             </div>
 
-                            <div className="flex gap-10 pb-1">
-                                <h4 className="text-black text-md font-semibold" style={{ flex: 1 }}>Product</h4>
-                                <h4 className="text-black text-md font-semibold">HD</h4>
+                            <div className="flex gap-16 pb-4 text-xs uppercase tracking-wider">
+                                <h4 className="text-gray-600 font-semibold" style={{ flex: 1 }}>Our Services</h4>
                             </div>
 
-                            <div style={{ position: "relative", overflow: "hidden", minHeight: 120 }}>
-                                {SLIDES.map((slide, si) => (
-                                    <div key={si} style={{ position: si === 0 ? "relative" : "absolute", top: 0, left: 0, right: 0 }}>
-                                        {slide.products.map((p, ri) => (
-                                            <div key={ri} ref={(el) => { rowRefs.current[si][ri] = el; }}
-                                                className="flex gap-10"
-                                                style={{ opacity: si === 0 ? 1 : 0, paddingBottom: 6, willChange: "transform, opacity" }}>
-                                                <p className="text-black text-sm pb-1" style={{ flex: 1 }}>{p.name}</p>
-                                                <p className="text-black text-sm pb-1">{p.hd}</p>
-                                            </div>
+                            <div style={{ position: "relative", overflow: "hidden", minHeight: 140, width: "100%" }}>
+                                <AnimatePresence mode="sync">  
+                                    <motion.div
+                                        key={currentSlide}
+                                        initial={{ x: "100%" }}  
+                                        animate={{ x: 0 }}
+                                        exit={{ x: "-100%" }}
+                                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                                        style={{ position: "absolute", top: 0, left: 0, width: "100%" }}
+                                    >
+                                        {SLIDES[currentSlide].products.map((p, ri) => (
+                                            <div
+                                                key={ri}
+                                                className="flex items-center gap-6 py-3 border-b border-gray-100"
+                                            >
+                                                {/* Text */}
+                                                <div style={{ flex: 1 }}>
+                                                    <p className="text-black text-base font-medium">{p.name}</p>
+                                                    {/* <p className="text-black text-base mt-1">{p.hd}</p> */}
+                                                </div>
+
+                                                {/* Image */}
+                                                <div style={{ width: 48, height: 48, flexShrink: 0 }}>
+                                                    <Image
+                                                        src={SLIDES[currentSlide].imgs[ri % 3]}
+                                                        width={48}
+                                                        height={48}
+                                                        alt={p.name}
+                                                        style={{ objectFit: "cover" }}
+                                                    />
+                                                </div>
+
+                                                {/* Button */}
+                                                <button className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex-shrink-0">
+                                                    <span className="text-black font-semibold text-lg">+</span>
+                                                </button>
+                                            </div>  
                                         ))}
-                                    </div>
-                                ))}
+                                    </motion.div>
+                                </AnimatePresence>
                             </div>
                         </div>
 
