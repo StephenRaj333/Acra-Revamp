@@ -109,32 +109,32 @@ const SLIDES = [
     g0: "#FFD6F9",
     g1: "#E843C4",
     g2: "#8A1C73",
-},
-{
-    headline: ["Marketing", "Communication"],
-    products: [
-        {
-            name: "Brand Messaging",
-            hd: "Clear, consistent communication that defines your voice"
-        },
-        {
-            name: "Campaign Strategy",
-            hd: "Result-driven campaigns across digital & offline channels"
-        },
-        {
-            name: "Content Creation",
-            hd: "Compelling copy and visuals that drive conversions"
-        },
-    ],
-    imgs: [
-        "/assets/images/mc-1.png",
-        "/assets/images/mc-2.png",
-        "/assets/images/mc-3.png",
-    ],
-    g0: "#FFE7B3",
-    g1: "#FF9F1C",
-    g2: "#B86B00",
-}
+    },
+    {
+        headline: ["Marketing", "Communication"],
+        products: [
+            {
+                name: "Brand Messaging",
+                hd: "Clear, consistent communication that defines your voice"
+            },
+            {
+                name: "Campaign Strategy",
+                hd: "Result-driven campaigns across digital & offline channels"
+            },
+            {
+                name: "Content Creation",
+                hd: "Compelling copy and visuals that drive conversions"
+            },
+        ],
+        imgs: [
+            "/assets/images/mc-1.png",
+            "/assets/images/mc-2.png",
+            "/assets/images/mc-3.png",
+        ],
+        g0: "#FFE7B3",
+        g1: "#FF9F1C",
+        g2: "#B86B00",
+    }
 ];
 // Orbit config â€” 3 arms at 120Â° each, centered on the visible hex area
 const ORBIT_R = "8.89vw";     // vw radius of orbit circle

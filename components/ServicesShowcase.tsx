@@ -21,14 +21,14 @@ const ACRO_CARDS: AcraCard[] = [
     { title: "Web Interfaces", caption: "UI/UX Design", thumbnail: "/assets/images/ui.png" },
     { title: "Mobile Flows", caption: "Product Experience", thumbnail: "/assets/images/ux.png" },
     { title: "Design Systems", caption: "Reusable Architecture", thumbnail: "/assets/images/ui-ux.png" },
-    { title: "Growth Roadmaps", caption: "Business Consulting", thumbnail: "/assets/images/ai-1.webp" },
-    { title: "Execution Planning", caption: "Delivery Frameworks", thumbnail: "/assets/images/brand-2.webp" },
-    { title: "Scale Programs", caption: "Market Expansion", thumbnail: "/assets/images/ui.png" },
-    { title: "Data Insights", caption: "Insight Engineering", thumbnail: "/assets/images/ai-2.webp" },
-    { title: "Conversion Design", caption: "Performance UX", thumbnail: "/assets/images/ux.png" },
-    { title: "Digital Presence", caption: "Brand Communications", thumbnail: "/assets/images/brand-3.webp" },
+    { title: "Content Strategy", caption: "Social Media", thumbnail: "/assets/images/sm-1.png" },
+    { title: "Social Campaigns", caption: "Reach & Engagement", thumbnail: "/assets/images/sm-2.png" },
+    { title: "Community Management", caption: "Audience Interactions", thumbnail: "/assets/images/sm-3.png" },
+    { title: "Brand Messaging", caption: "Marketing Communication", thumbnail: "/assets/images/mc-1.png" },
+    { title: "Campaign Strategy", caption: "Digital & Offline", thumbnail: "/assets/images/mc-2.png" },
+    { title: "Content Creation", caption: "Drive Conversions", thumbnail: "/assets/images/mc-3.png" },
 ];
-
+    
 const firstRow = ACRO_CARDS.slice(0, 5);
 const secondRow = ACRO_CARDS.slice(5, 10);
 const thirdRow = ACRO_CARDS.slice(10, 15);
