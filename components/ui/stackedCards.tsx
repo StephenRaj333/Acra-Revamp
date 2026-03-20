@@ -174,18 +174,20 @@ function StackedCardsPanel({
               }}
               initial={false}
               transition={{
-                type: "spring",
+                type: "tween", 
                 stiffness: 260,
                 damping: 20,
               }}
               style={{
                 zIndex: index + 1,
                 borderColor: `${accent}55`,
-                background: `linear-gradient(160deg, ${accent}24, rgba(7,12,10,0.92) 66%)`,
+                background: `linear-gradient(160deg, ${accent}f0, #091019 70%)`,
+                backgroundColor: "#091019",
                 boxShadow: `0 16px 42px ${accent}1f, inset 0 1px 0 rgba(255,255,255,0.14)`,
                 transformStyle: "preserve-3d",
                 // backfaceVisibility: "hidden",
                 // WebkitBackfaceVisibility: "hidden",
+                overflow: "hidden",  
               }}
             >
               <p className="text-[0.68rem] uppercase tracking-[0.22em]" style={{ color: accent }}>
