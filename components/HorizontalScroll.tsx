@@ -90,7 +90,6 @@ export default function HorizontalScroll() {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [brandWordIndex, setBrandWordIndex] = useState(0);
-  const [loaderIndex, setLoaderIndex] = useState(0);
   const activeRef       = useRef(0);
   const sectionRefs     = useRef<HTMLDivElement[]>([]);
   const headingRefs     = useRef<HTMLDivElement[]>([]);
@@ -119,13 +118,8 @@ export default function HorizontalScroll() {
       setBrandWordIndex((current) => (current + 1) % BRAND_WORDS.length);
     }, 1600);
 
-    const loaderTimer = window.setInterval(() => {
-      setLoaderIndex((current) => (current + 1) % LOADER_STEPS.length);
-    }, 2100);
-
     return () => {
       window.clearInterval(brandTimer);
-      window.clearInterval(loaderTimer);
     };
   }, []);
 
@@ -869,7 +863,6 @@ export default function HorizontalScroll() {
                     <LoaderPanel
                       accent={section.accent}
                       steps={LOADER_STEPS}
-                      progress={activeIndex === i ? loaderIndex : 0}
                     />
                   )}
                   {i === 2 && (
