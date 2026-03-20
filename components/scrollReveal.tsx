@@ -414,7 +414,7 @@ const ScrollReveal = () => {
                                 </h2>  
                             </div>
 
-                            <div style={{ position: "relative", overflow: 'hidden', minHeight: "14vw", width: "100%", zIndex: 10 }}>
+                            <div style={{ position: "relative", overflow: 'hidden', minHeight: "17vw", width: "100%", zIndex: 10 }}>
                                 <AnimatePresence mode="sync">
                                     <motion.div
                                         key={currentSlide}
@@ -437,7 +437,7 @@ const ScrollReveal = () => {
                                                 {/* Left: Text */}
                                                 <div style={{ flex: 1 }}>
                                                     <p
-                                                        className="text-[0.71vw] font-semibold mb-[0.18vw]"
+                                                        className="text-[1vw] font-semibold mb-[0.18vw]"
                                                         style={{ color: "#f4f7ff" }}
                                                     >
                                                         {p.name}
