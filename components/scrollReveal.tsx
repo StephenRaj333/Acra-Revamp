@@ -314,7 +314,7 @@ const ScrollReveal = () => {
             <div
                 ref={wrapperRef}
                 className="scroll-reveal-wrapper"
-                style={{ minHeight: "300vh", paddingTop: "7.11vw", position: "relative", overflow: "hidden" }}
+                style={{ minHeight: `${SLIDE_COUNT * 100}vh`, paddingTop: "7.11vw", position: "relative", overflow: "hidden" }}
             >
 
                 <div
