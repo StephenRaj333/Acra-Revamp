@@ -61,7 +61,7 @@ export function ShootingStars({ count = 12 }: ShootingStarsProps) {
             opacity: 0.85;
           }
           100% {
-            transform: translate3d(48vw, 18vw, 0) rotate(-20deg);
+            transform: translate3d(58vw, 0, 0) rotate(-20deg);
             opacity: 0;
           }
         }
