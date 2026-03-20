@@ -11,19 +11,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SLIDES = [
     {
-        headline: ["Brand", "Design"], 
+        headline: ["Brand", "Design"],
         products: [
-            { 
-                name: "Logo Systems", 
-                hd: "Scalable logos built for digital & print consistency" 
+            {
+                name: "Logo Systems",
+                hd: "Scalable logos built for digital & print consistency"
             },
-            { 
-                name: "Visual Identity", 
-                hd: "Cohesive colors, typography & assets for strong recall" 
+            {
+                name: "Visual Identity",
+                hd: "Cohesive colors, typography & assets for strong recall"
             },
-            { 
-                name: "Brand Guidelines", 
-                hd: "Clear rules to maintain brand consistency across platforms" 
+            {
+                name: "Brand Guidelines",
+                hd: "Clear rules to maintain brand consistency across platforms"
             },
         ],
         imgs: [
@@ -31,25 +31,25 @@ const SLIDES = [
             "/assets/images/brand-2.webp",
             "/assets/images/brand-3.webp",
         ],
-        g0: "#FFE4E6",
-        g1: "#FB7185",
-        g2: "#BE123C",
+        g0: "#FFB7A7",
+        g1: "#FF4B31",
+        g2: "#971809",
     },
 
     {
         headline: ["UI/UX", "Design"],
         products: [
-            { 
-                name: "Web Interfaces", 
-                hd: "High-conversion, responsive web experiences" 
+            {
+                name: "Web Interfaces",
+                hd: "High-conversion, responsive web experiences"
             },
-            { 
-                name: "Mobile Apps", 
-                hd: "Intuitive mobile-first designs with seamless flows" 
+            {
+                name: "Mobile Apps",
+                hd: "Intuitive mobile-first designs with seamless flows"
             },
-            { 
-                name: "Design Systems", 
-                hd: "Reusable components for faster and scalable development" 
+            {
+                name: "Design Systems",
+                hd: "Reusable components for faster and scalable development"
             },
         ],
         imgs: [
@@ -57,25 +57,25 @@ const SLIDES = [
             "/assets/images/ux.png",
             "/assets/images/ui-ux.png",
         ],
-        g0: "#DBEAFE",
-        g1: "#60A5FA",
-        g2: "#1D4ED8",
+        g0: "#A9C7FF",
+        g1: "#2F6DF6",
+        g2: "#1633A1",
     },
 
     {
         headline: ["AI", "Driven"],
         products: [
-            { 
-                name: "Data Insights", 
-                hd: "Turn raw data into actionable business intelligence" 
+            {
+                name: "Data Insights",
+                hd: "Turn raw data into actionable business intelligence"
             },
-            { 
-                name: "Automation", 
-                hd: "Streamline workflows and reduce manual effort" 
+            {
+                name: "Automation",
+                hd: "Streamline workflows and reduce manual effort"
             },
-            { 
-                name: "Predictive Models", 
-                hd: "Forecast trends with AI-powered decision systems" 
+            {
+                name: "Predictive Models",
+                hd: "Forecast trends with AI-powered decision systems"
             },
         ],
         imgs: [
@@ -83,9 +83,9 @@ const SLIDES = [
             "/assets/images/ai-2.webp",
             "/assets/images/ai-3.webp",
         ],
-        g0: "#E9D5FF",
-        g1: "#A855F7",
-        g2: "#6B21A8",
+        g0: "#BDF6DC",
+        g1: "#20C37C",
+        g2: "#0E6A44",
     },
 ];
 // Orbit config â€” 3 arms at 120Â° each, centered on the visible hex area
@@ -167,7 +167,7 @@ const ScrollReveal = () => {
                     transition(curRef.current, newIdx);
                     curRef.current = newIdx;
                 }
-                
+
                 // Parallax effect: background moves slower than scroll
                 if (parallaxRef.current) {
                     const parallaxAmount = self.progress * 100; // 0 to 100
@@ -266,7 +266,7 @@ const ScrollReveal = () => {
                 className="scroll-reveal-wrapper"
                 style={{ minHeight: "300vh", paddingTop: "7.11vw", position: "relative", overflow: "hidden" }}
             >
-            
+
                 <div
                     ref={parallaxRef}
                     style={{
@@ -283,7 +283,7 @@ const ScrollReveal = () => {
                     <StarsBackground />
                 </div>
 
-                <div ref={stickyRef} className="sticky-wrapper  mx-auto relative max-w-[48vw] w-full" style={{ position: "sticky", top: "15vh", zIndex: 2 }}> 
+                <div ref={stickyRef} className="sticky-wrapper  mx-auto relative max-w-[48vw] w-full" style={{ position: "sticky", top: "15vh", zIndex: 2 }}>
 
                     <div style={{
                         position: "absolute",
@@ -339,7 +339,23 @@ const ScrollReveal = () => {
                         ))}
                     </div>
 
-                        <div className="w-full relative overflow-hidden p-[1.78vw] min-h-[26.67vw] flex items-center justify-center gap-[1.78vw] bg-white rounded-4xl max-w-[48vw] mx-auto spiral-box">
+                    <div
+                        className="w-full relative overflow-hidden p-[1.78vw] min-h-[26.67vw] flex items-center justify-center gap-[1.78vw] rounded-4xl max-w-[48vw] mx-auto spiral-box border border-white/14"
+                        style={{
+                            background: `radial-gradient(130% 120% at 8% 12%, ${SLIDES[currentSlide].g1}2b 0%, rgba(9, 13, 24, 0.96) 42%), radial-gradient(80% 90% at 88% 86%, ${SLIDES[currentSlide].g2}40 0%, rgba(5, 8, 14, 0.96) 56%), linear-gradient(160deg, rgba(7, 10, 18, 0.97), rgba(11, 15, 27, 0.95) 45%, rgba(6, 9, 16, 0.97))`,
+                            boxShadow: `0 1.78vw 4.45vw rgba(0,0,0,0.48), inset 0 0 0 0.04vw rgba(255,255,255,0.08), 0 0 2.2vw ${SLIDES[currentSlide].g2}33`,
+                        }}
+                    >
+
+                        <div
+                            className="pointer-events-none absolute inset-0"
+                            style={{
+                                background: `radial-gradient(circle at 92% 16%, ${SLIDES[currentSlide].g0}33, transparent 36%), radial-gradient(circle at 20% 90%, ${SLIDES[currentSlide].g1}22, transparent 34%)`,
+                            }}
+                        />
+                        <div className="pointer-events-none absolute inset-x-[3%] top-[3%] h-[0.06vw] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+                        <div className="pointer-events-none absolute right-[2.2vw] top-[1.5vw] h-[6.2vw] w-[6.2vw] rounded-full border border-white/10" />
+                        <div className="pointer-events-none absolute right-[2.9vw] top-[2.2vw] h-[4.8vw] w-[4.8vw] rounded-full border border-white/7" />
 
                         <div ref={hexRef} className="hex-wrap absolute left-[-35%] top-[-40%]" style={{ willChange: "transform" }}>
                             <svg width="35.56vw" height="35.56vw" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
@@ -367,23 +383,42 @@ const ScrollReveal = () => {
                                         opacity: si === 0 ? 1 : 0,
                                         willChange: "transform, opacity",
                                     }}>
-                                    <h4 className="text-white text-[2.13vw] font-bold">
+                                    <h4
+                                        className="text-[2.13vw] font-bold"
+                                        style={{
+                                            color: "#ffffff",
+                                            textShadow: `0 0.22vw 0.71vw ${SLIDES[currentSlide].g2}35`,
+                                        }}
+                                    >
                                         {slide.headline[0]} <br /> {slide.headline[1]}
                                     </h4>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="text-right-content w-1/2 pl-[1.42vw]">  
-                            <div className="title pb-[1vw]">  
-                                <h2 className="text-[2.13vw] text-black font-bold leading-tight">Our Services</h2>
+                        <div className="text-right-content w-1/2 pl-[1.42vw]">
+                            <div className="title pb-[1vw] flex items-center justify-between">
+                                <h2
+                                    className="text-[2.13vw] font-bold leading-tight"
+                                    style={{
+                                        backgroundImage: `linear-gradient(100deg, ${SLIDES[currentSlide].g0} 0%, #ffffff 38%, ${SLIDES[currentSlide].g1} 100%)`,
+                                        backgroundSize: "100% 100%",
+                                        WebkitBackgroundClip: "text",
+                                        backgroundClip: "text",
+                                        color: "transparent",
+                                        WebkitTextFillColor: "transparent",
+                                        display: "inline-block",
+                                    }}
+                                >
+                                    Our Services
+                                </h2>  
                             </div>
 
-                            <div style={{ position: "relative", overflow: 'hidden', minHeight: "14vw", width: "100%",zIndex: 10 }}>
-                                <AnimatePresence mode="sync">  
+                            <div style={{ position: "relative", overflow: 'hidden', minHeight: "14vw", width: "100%", zIndex: 10 }}>
+                                <AnimatePresence mode="sync">
                                     <motion.div
                                         key={currentSlide}
-                                        initial={{ x: "100%" }}  
+                                        initial={{ x: "100%" }}
                                         animate={{ x: 0 }}
                                         exit={{ x: "-100%" }}
                                         transition={{ duration: 0.6, ease: "easeInOut" }}
@@ -392,23 +427,30 @@ const ScrollReveal = () => {
                                         {SLIDES[currentSlide].products.map((p, ri) => (
                                             <div
                                                 key={ri}
-                                                className="flex items-center justify-between py-[0.71vw] mb-[0.36vw] group cursor-pointer"
+                                                className="flex items-center justify-between py-[0.71vw] px-[0.62vw] mb-[0.36vw] group cursor-pointer rounded-[0.62vw] border"
                                                 style={{
                                                     transition: "all 0.3s ease",
-                                                }}  
+                                                    borderColor: `${SLIDES[currentSlide].g1}30`,
+                                                    background: `linear-gradient(90deg, ${SLIDES[currentSlide].g2}1f, rgba(255,255,255,0.02) 46%, rgba(255,255,255,0.015))`,
+                                                }}
                                             >
                                                 {/* Left: Text */}
                                                 <div style={{ flex: 1 }}>
-                                                    <p className="text-black text-[0.71vw] font-semibold mb-[0.18vw]">{p.name}</p>
-                                                    <p className="text-gray-500 text-[0.62vw]">{p.hd}</p>
+                                                    <p
+                                                        className="text-[0.71vw] font-semibold mb-[0.18vw]"
+                                                        style={{ color: "#f4f7ff" }}
+                                                    >
+                                                        {p.name}
+                                                    </p>
+                                                    <p className="text-[0.62vw]" style={{ color: "rgba(228, 235, 252, 0.72)" }}>{p.hd}</p>
                                                 </div>
 
                                                 {/* Right: Icon Badge */}
-                                                <div 
+                                                <div
                                                     className="w-[2.13vw] h-[2.13vw] rounded-[0.36vw] flex items-center justify-center flex-shrink-0 ml-[0.71vw]"
                                                     style={{
                                                         background: `linear-gradient(135deg, ${SLIDES[currentSlide].g0} 0%, ${SLIDES[currentSlide].g1} 100%)`,
-                                                        boxShadow: "0 0.18vw 0.53vw rgba(0,0,0,0.1)",
+                                                        boxShadow: `0 0.18vw 0.62vw ${SLIDES[currentSlide].g2}55`,
                                                     }}
                                                 >
                                                     <Image
@@ -418,22 +460,23 @@ const ScrollReveal = () => {
                                                         alt={p.name}
                                                         style={{
                                                             objectFit: "contain",
-                                                            filter: "brightness(0) invert(1) opacity(0.7)",
+                                                            filter: "brightness(0) invert(1) opacity(0.88)",
                                                         }}
                                                     />
                                                 </div>
 
                                                 {/* Plus button */}
-                                                <button 
+                                                <button
                                                     className="flex items-center justify-center w-[1.78vw] h-[1.78vw] rounded-full flex-shrink-0 ml-[0.53vw] transition-all group-hover:scale-110"
                                                     style={{
-                                                        background: SLIDES[currentSlide].g0,
+                                                        background: `linear-gradient(135deg, ${SLIDES[currentSlide].g1} 0%, ${SLIDES[currentSlide].g2} 100%)`,
                                                         color: "white",
+                                                        boxShadow: `0 0.27vw 0.8vw ${SLIDES[currentSlide].g2}66`,
                                                     }}
                                                 >
                                                     <span className="text-[0.89vw] font-light">+</span>
                                                 </button>
-                                            </div>  
+                                            </div>
                                         ))}
                                     </motion.div>
                                 </AnimatePresence>
