@@ -869,7 +869,7 @@ export default function HorizontalScroll() {
                     <StackedCardsPanel
                       accent={section.accent}
                       cards={AI_STACKED_CARDS}
-                      autoplayDelay={5200} 
+                      autoplayDelay={2600} 
                       pauseOnHover 
                       sensitivity={260} 
                     />
