@@ -870,7 +870,7 @@ export default function HorizontalScroll() {
                       accent={section.accent}
                       cards={AI_STACKED_CARDS}
                       autoplayDelay={2600} 
-                      pauseOnHover 
+                      pauseOnHover={false}
                       sensitivity={260} 
                     />
                   )}
