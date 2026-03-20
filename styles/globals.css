@@ -41,3 +41,18 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.spiral-box::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 200px;   /* adjust */
+  height: 200px;  /* adjust */
+
+  background-image: url("https://m2pfintech.com/images/kyc-suite/move-business/spiral-top-right.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%; 
+  pointer-events: none;
+} 

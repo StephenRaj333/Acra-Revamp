@@ -487,38 +487,6 @@ export default function HorizontalScroll() {
         />
       </div>
 
-      {/* ── Section nav pills ─────────────────────────────────────────────── */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6">
-        {sections.map((s, i) => (
-          <div
-            key={i}
-            ref={(el) => {
-              if (el) labelRefs.current[i] = el;
-            }}
-            className="flex items-center gap-2 cursor-pointer group"
-            style={{
-              color: i === 0 ? "#ffffff" : "rgba(255,255,255,0.25)",
-              fontSize: 10,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              transition: "color 0.4s",
-            }}
-          >
-            <span>{String(i + 1).padStart(2, "0")}</span>
-            <div
-              className="dot rounded-full transition-all duration-300"
-              style={{
-                width: 6,
-                height: 6,
-                backgroundColor:
-                  i === 0 ? s.accent : "rgba(255,255,255,0.2)",
-              }}
-            />
-          </div>
-        ))}
-      </div>
-
       {/* ── Horizontal scroll container ───────────────────────────────────── */}
       <div
         ref={containerRef}

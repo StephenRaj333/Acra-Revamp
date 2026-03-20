@@ -9,11 +9,20 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SLIDES = [
     {
-        headline: ["Brand", "Design"],
+        headline: ["Brand", "Design"], 
         products: [
-            { name: "Logo Systems", hd: "110 × 110" },
-            { name: "Visual Identity", hd: "110 × 110" },
-            { name: "Brand Guidelines", hd: "110 × 110" },
+            { 
+                name: "Logo Systems", 
+                hd: "Scalable logos built for digital & print consistency" 
+            },
+            { 
+                name: "Visual Identity", 
+                hd: "Cohesive colors, typography & assets for strong recall" 
+            },
+            { 
+                name: "Brand Guidelines", 
+                hd: "Clear rules to maintain brand consistency across platforms" 
+            },
         ],
         imgs: [
             "/assets/images/brand-1.webp",
@@ -28,9 +37,18 @@ const SLIDES = [
     {
         headline: ["UI/UX", "Design"],
         products: [
-            { name: "Web Interfaces", hd: "110 × 110" },
-            { name: "Mobile Apps", hd: "110 × 110" },
-            { name: "Design Systems", hd: "110 × 110" },
+            { 
+                name: "Web Interfaces", 
+                hd: "High-conversion, responsive web experiences" 
+            },
+            { 
+                name: "Mobile Apps", 
+                hd: "Intuitive mobile-first designs with seamless flows" 
+            },
+            { 
+                name: "Design Systems", 
+                hd: "Reusable components for faster and scalable development" 
+            },
         ],
         imgs: [
             "/assets/images/ui.png",
@@ -45,9 +63,18 @@ const SLIDES = [
     {
         headline: ["AI", "Driven"],
         products: [
-            { name: "Data Insights", hd: "110 × 110" },
-            { name: "Automation", hd: "110 × 110" },
-            { name: "Predictive Models", hd: "110 × 110" },
+            { 
+                name: "Data Insights", 
+                hd: "Turn raw data into actionable business intelligence" 
+            },
+            { 
+                name: "Automation", 
+                hd: "Streamline workflows and reduce manual effort" 
+            },
+            { 
+                name: "Predictive Models", 
+                hd: "Forecast trends with AI-powered decision systems" 
+            },
         ],
         imgs: [
             "/assets/images/ai-1.webp",
@@ -59,11 +86,10 @@ const SLIDES = [
         g2: "#6B21A8",
     },
 ];
-
 // Orbit config â€” 3 arms at 120Â° each, centered on the visible hex area
-const ORBIT_R = 200;           // px radius of orbit circle
-const ORBIT_CX = 200;           // px from sticky-wrapper left  (hex center)
-const ORBIT_CY = 200;           // px from sticky-wrapper top   (hex center)
+const ORBIT_R = "8.89vw";     // vw radius of orbit circle
+const ORBIT_CX = "8.89vw";    // vw from sticky-wrapper left  (hex center)
+const ORBIT_CY = "8.89vw";    // vw from sticky-wrapper top   (hex center)
 const BASE_ANGLES = [-90, 30, 150]; // starting angles for the 3 orbit slots (degrees)
 
 const ScrollReveal = () => {
@@ -214,9 +240,9 @@ const ScrollReveal = () => {
 
     return (
         <>
-            <div ref={wrapperRef} className="scroll-reveal-wrapper" style={{ minHeight: "300vh", paddingTop: "10rem" }}>
+            <div ref={wrapperRef} className="scroll-reveal-wrapper" style={{ minHeight: "300vh", paddingTop: "7.11vw" }}>
 
-                <div ref={stickyRef} className="sticky-wrapper mx-auto relative max-w-[1080px] w-full" style={{ position: "sticky", top: "8vh" }}>
+                <div ref={stickyRef} className="sticky-wrapper  mx-auto relative max-w-[48vw] w-full" style={{ position: "sticky", top: "15vh" }}> 
 
                     <div style={{
                         position: "absolute",
@@ -233,7 +259,7 @@ const ScrollReveal = () => {
                                     width: ORBIT_R,
                                     height: "100%",
                                     left: 0, top: 0,
-                                    transformOrigin: "0px 0px",
+                                    transformOrigin: "0 0",
                                 }}
                             >
                                 {/* Counter-rotate wrapper â€” keeps images upright */}
@@ -241,8 +267,8 @@ const ScrollReveal = () => {
                                     ref={(el) => { counterRefs.current[ai] = el; }}
                                     style={{
                                         position: "absolute",
-                                        right: -150, top: -150,
-                                        width: "200px", height: "200px",
+                                        right: "-7.67vw", top: "-6.67vw",
+                                        width: "8.89vw", height: "8.89vw",
                                     }}
                                 >
                                     {SLIDES.map((slide, si) => (
@@ -262,7 +288,7 @@ const ScrollReveal = () => {
                                                 style={{
                                                     objectFit: "contain",
                                                     width: "100%", height: "100%",
-                                                    filter: "drop-shadow(0 6px 18px rgba(0,0,0,0.22))",
+                                                    filter: "drop-shadow(0 0.27vw 0.80vw rgba(0,0,0,0.22))",
                                                 }}
                                             />
                                         </div>
@@ -272,10 +298,10 @@ const ScrollReveal = () => {
                         ))}
                     </div>
 
-                    <div className="w-full relative overflow-hidden p-10 min-h-[600px] flex items-center justify-center gap-10 bg-white rounded-4xl max-w-[1080px] mx-auto">
+                        <div className="w-full relative overflow-hidden p-[1.78vw] min-h-[26.67vw] flex items-center justify-center gap-[1.78vw] bg-white rounded-4xl max-w-[48vw] mx-auto spiral-box">
 
                         <div ref={hexRef} className="hex-wrap absolute left-[-35%] top-[-40%]" style={{ willChange: "transform" }}>
-                            <svg width="800px" height="800px" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="35.56vw" height="35.56vw" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="hexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                         <stop ref={stop0Ref} offset="0%" stopColor={SLIDES[0].g0} />
@@ -290,34 +316,29 @@ const ScrollReveal = () => {
                             </svg>
                         </div>
 
-                        <div className="spinner-text w-1/2" style={{ position: "relative", minHeight: 160 }}>
+                        <div className="spinner-text w-1/2" style={{ position: "relative", minHeight: "7.11vw" }}>
                             {SLIDES.map((slide, si) => (
                                 <div key={si} ref={(el) => { headlineRefs.current[si] = el; }}
                                     className="text-content"
                                     style={{
                                         position: "absolute",
-                                        left: "10%", top: "-50px",
+                                        left: "10%", top: "-2.22vw",
                                         opacity: si === 0 ? 1 : 0,
                                         willChange: "transform, opacity",
                                     }}>
-                                    <h4 className="text-white text-5xl font-bold">
+                                    <h4 className="text-white text-[2.13vw] font-bold">
                                         {slide.headline[0]} <br /> {slide.headline[1]}
                                     </h4>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="text-right-content w-1/2 pl-8">
-                            <div className="title pb-12">
-                                <h2 className="text-5xl text-black font-bold leading-tight">Our <br /> Services</h2>
+                        <div className="text-right-content w-1/2 pl-[1.42vw]">  
+                            <div className="title pb-[1vw]">  
+                                <h2 className="text-[2.13vw] text-black font-bold leading-tight">Our Services</h2>
                             </div>
 
-                            <div className="flex gap-16 pb-6 text-xs uppercase tracking-widest font-semibold">
-                                <h4 className="text-gray-400" style={{ flex: 1 }}>Service</h4>
-                                <h4 className="text-gray-400">No.</h4>
-                            </div>
-
-                            <div style={{ position: "relative", overflow: "hidden", minHeight: 160, width: "100%" }}>
+                            <div style={{ position: "relative", overflow: 'hidden', minHeight: "14vw", width: "100%",zIndex: 10 }}>
                                 <AnimatePresence mode="sync">  
                                     <motion.div
                                         key={currentSlide}
@@ -330,35 +351,23 @@ const ScrollReveal = () => {
                                         {SLIDES[currentSlide].products.map((p, ri) => (
                                             <div
                                                 key={ri}
-                                                className="flex items-center justify-between py-4 mb-2 group cursor-pointer"
+                                                className="flex items-center justify-between py-[0.71vw] mb-[0.36vw] group cursor-pointer"
                                                 style={{
                                                     transition: "all 0.3s ease",
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.currentTarget.style.paddingLeft = "12px";
-                                                    e.currentTarget.style.paddingRight = "12px";
-                                                    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.02)";
-                                                    e.currentTarget.style.borderRadius = "8px";
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.currentTarget.style.paddingLeft = "0";
-                                                    e.currentTarget.style.paddingRight = "0";
-                                                    e.currentTarget.style.backgroundColor = "transparent";
-                                                    e.currentTarget.style.borderRadius = "0";
-                                                }}
+                                                }}  
                                             >
                                                 {/* Left: Text */}
                                                 <div style={{ flex: 1 }}>
-                                                    <p className="text-black text-base font-semibold mb-1">{p.name}</p>
-                                                    <p className="text-gray-500 text-sm">{p.hd}</p>
+                                                    <p className="text-black text-[0.71vw] font-semibold mb-[0.18vw]">{p.name}</p>
+                                                    <p className="text-gray-500 text-[0.62vw]">{p.hd}</p>
                                                 </div>
 
                                                 {/* Right: Icon Badge */}
                                                 <div 
-                                                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ml-4"
+                                                    className="w-[2.13vw] h-[2.13vw] rounded-[0.36vw] flex items-center justify-center flex-shrink-0 ml-[0.71vw]"
                                                     style={{
                                                         background: `linear-gradient(135deg, ${SLIDES[currentSlide].g0} 0%, ${SLIDES[currentSlide].g1} 100%)`,
-                                                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                                        boxShadow: "0 0.18vw 0.53vw rgba(0,0,0,0.1)",
                                                     }}
                                                 >
                                                     <Image
@@ -375,13 +384,13 @@ const ScrollReveal = () => {
 
                                                 {/* Plus button */}
                                                 <button 
-                                                    className="flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ml-3 transition-all group-hover:scale-110"
+                                                    className="flex items-center justify-center w-[1.78vw] h-[1.78vw] rounded-full flex-shrink-0 ml-[0.53vw] transition-all group-hover:scale-110"
                                                     style={{
                                                         background: SLIDES[currentSlide].g0,
                                                         color: "white",
                                                     }}
                                                 >
-                                                    <span className="text-xl font-light">+</span>
+                                                    <span className="text-[0.89vw] font-light">+</span>
                                                 </button>
                                             </div>  
                                         ))}
