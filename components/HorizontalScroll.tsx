@@ -1,7 +1,10 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import FlipWordsPanel from "@/components/ui/flipWords";
+import LoaderPanel from "@/components/ui/loaderPanel";
+import StackedCardsPanel from "@/components/ui/stackedCards";  
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,121 +54,41 @@ const sections = [
   },
 ];
 
-// ─── Ellipse orbiting brand visual ───────────────────────────────────────────
-function BrandEllipse({
-  section,
-  active,
-}: {
-  section: (typeof sections)[0];
-  active: boolean;
-}) {
-  return (
-    <div
-      className="relative flex items-center justify-center"
-      style={{ width: 420, height: 420 }}
-    >
-      {/* Outer ring */}
-      <div
-        className="absolute rounded-full border transition-all duration-700"
-        style={{
-          width: 420,
-          height: 420,
-          borderColor: active ? section.accent + "55" : "transparent",
-          boxShadow: active ? `0 0 60px ${section.accent}22` : "none",
-          transition: "all 0.8s cubic-bezier(.4,0,.2,1)",
-        }}
-      />
-      {/* Middle ring */}
-      <div
-        className="absolute rounded-full border transition-all duration-700"
-        style={{
-          width: 300,
-          height: 300,
-          borderColor: active ? section.accent + "33" : "transparent",
-          transition: "all 0.8s cubic-bezier(.4,0,.2,1) 0.1s",
-        }}
-      />
-      {/* Core circle */}
-      <div
-        className="absolute rounded-full transition-all duration-700 flex items-center justify-center overflow-hidden"
-        style={{
-          width: 220,
-          height: 220,
-          background: active
-            ? `radial-gradient(circle at 40% 40%, ${section.accent}33, ${section.accent}08)`
-            : "rgba(255,255,255,0.03)",
-          border: `2px solid ${active ? section.accent + "66" : "rgba(255,255,255,0.06)"}`,
-          backdropFilter: "blur(12px)",
-          transition: "all 0.8s cubic-bezier(.4,0,.2,1)",
-        }}
-      >
-        {/* Big brand letter in center */}
-        <span
-          className="font-black select-none transition-all duration-700"
-          style={{
-            fontSize: 100,
-            color: active ? section.accent : "rgba(255,255,255,0.04)",
-            lineHeight: 1,
-            letterSpacing: "-0.05em",
-          }}
-        >
-          {section.brandLetters[0]}
-        </span>
-      </div>
+const BRAND_WORDS = ["Identity", "Voice", "Recall", "Trust", "Momentum"];
 
-      {/* Orbiting letters */}
-      {section.brandLetters.map((letter, i) => {
-        const total = section.brandLetters.length;
-        const angle = (i / total) * 2 * Math.PI - Math.PI / 2;
-        const r = 150;
-        const x = Math.cos(angle) * r;
-        const y = Math.sin(angle) * r;
-        return (
-          <div
-            key={i}
-            className="absolute flex items-center justify-center rounded-full font-black transition-all duration-700"
-            style={{
-              width: 48,
-              height: 48,
-              left: "50%",
-              top: "50%",
-              transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
-              background: active
-                ? `${section.accent}22`
-                : "rgba(255,255,255,0.04)",
-              border: `1.5px solid ${active ? section.accent + "55" : "rgba(255,255,255,0.07)"}`,
-              color: active ? section.accent : "rgba(255,255,255,0.15)",
-              fontSize: 16,
-              boxShadow: active ? `0 0 16px ${section.accent}33` : "none",
-              transition: `all 0.6s cubic-bezier(.4,0,.2,1) ${i * 0.05}s`,
-            }}
-          >
-            {letter}
-          </div>
-        );
-      })}
+const LOADER_STEPS = [
+  "Discovery synced",
+  "Flows mapped",
+  "Prototype validated",
+  "System shipped",
+];
 
-      {/* Accent dot top */}
-      <div
-        className="absolute rounded-full transition-all duration-500"
-        style={{
-          width: 10,
-          height: 10,
-          top: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          background: active ? section.accent : "rgba(255,255,255,0.1)",
-          boxShadow: active ? `0 0 20px ${section.accent}` : "none",
-        }}
-      />
-    </div>
-  );
-}
+const AI_STACKED_CARDS = [
+  {
+    title: "Signal Layer",
+    detail: "Live inputs ranked and routed in one motion system.",
+  },
+  {
+    title: "Forecast Layer",
+    detail: "Models reprioritize decisions as fresh data arrives.",
+  },
+  {
+    title: "Action Layer",
+    detail: "Automation sequences fire only when confidence is high.",
+  },
+  {
+    title: "Insight Layer",
+    detail: "Executive-ready summaries stack behind the live engine.",
+  },
+]; 
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function HorizontalScroll() {
   const containerRef    = useRef<HTMLDivElement>(null);
   const trackRef        = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [brandWordIndex, setBrandWordIndex] = useState(0);
+  const [loaderIndex, setLoaderIndex] = useState(0);
   const activeRef       = useRef(0);
   const sectionRefs     = useRef<HTMLDivElement[]>([]);
   const headingRefs     = useRef<HTMLDivElement[]>([]);
@@ -181,6 +104,21 @@ export default function HorizontalScroll() {
   const backdropTextRef = useRef<HTMLDivElement[]>([]);  // giant bg word
   // Cross-section traveler — single element that voyages across all 3 panels
   const travelerRef     = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const brandTimer = window.setInterval(() => {
+      setBrandWordIndex((current) => (current + 1) % BRAND_WORDS.length);
+    }, 1600);
+
+    const loaderTimer = window.setInterval(() => {
+      setLoaderIndex((current) => (current + 1) % LOADER_STEPS.length);
+    }, 1100);
+
+    return () => {
+      window.clearInterval(brandTimer);
+      window.clearInterval(loaderTimer);
+    };
+  }, []);
 
   useEffect(() => {
     // ── GSAP horizontal scroll ────────────────────────────────────────────
@@ -202,6 +140,7 @@ export default function HorizontalScroll() {
           const idx = Math.round(self.progress * (sections.length - 1));
           if (idx !== activeRef.current) {
             activeRef.current = idx;
+            setActiveIndex(idx);
             // update labels
             labelRefs.current.forEach((el, i) => {
               if (!el) return;
@@ -230,9 +169,6 @@ export default function HorizontalScroll() {
             const ux    = travelerRef.current.querySelector(".traveler-ux")    as HTMLElement;
             const data  = travelerRef.current.querySelector(".traveler-data")  as HTMLElement;
             if (brand && ux && data) {
-              // Phase 1 (0–0.35): brand visible
-              // Phase 2 (0.3–0.6): crossfade brand→ux
-              // Phase 3 (0.6–1.0): crossfade ux→data
               const brandO = p < 0.28 ? 1 : p < 0.46 ? 1 - (p - 0.28) / 0.18 : 0;
               const uxO    = p < 0.30 ? 0 : p < 0.48 ? (p - 0.30) / 0.18 :
                              p < 0.68 ? 1 : p < 0.84 ? 1 - (p - 0.68) / 0.16 : 0;
@@ -252,10 +188,7 @@ export default function HorizontalScroll() {
       ease: "none",
     });
 
-    // ── Cross-section TRAVELER ────────────────────────────────────────────
-    // The traveler starts at left:8vw in the first panel and physically
-    // travels rightward across all three panels, morphing its illustration.
-    // We animate it in viewport-space using the scroll progress.
+
     if (travelerRef.current) {
       // Position: moves from 8vw to (300vw - 8vw) so it covers all panels
       gsap.to(travelerRef.current, {
@@ -498,12 +431,7 @@ export default function HorizontalScroll() {
           className="flex h-full"
           style={{ width: `${sections.length * 100}vw`, position: "relative" }}
         >
-          {/* ──────────────────────────────────────────────────────────────────
-              TRAVELER — single element that voyages across all 3 sections.
-              It starts at 8vw from left at mid-height, physically travels
-              rightward while morphing: Brand Seal → UX Cursor → Data Orb.
-              Three layered children, their opacities are GSAP-tween'd.
-          ────────────────────────────────────────────────────────────────── */}
+         
           <div
             ref={travelerRef}
             style={{
@@ -888,6 +816,26 @@ export default function HorizontalScroll() {
                       />
                     );
                   })}
+                  {i === 0 && (
+                    <FlipWordsPanel
+                      accent={section.accent}
+                      words={BRAND_WORDS}
+                      activeIndex={activeIndex === i ? brandWordIndex : 0}
+                    />
+                  )}
+                  {i === 1 && (
+                    <LoaderPanel
+                      accent={section.accent}
+                      steps={LOADER_STEPS}
+                      progress={activeIndex === i ? loaderIndex : 0}
+                    />
+                  )}
+                  {i === 2 && (
+                    <StackedCardsPanel
+                      accent={section.accent}
+                      cards={AI_STACKED_CARDS}
+                    />
+                  )}
                 </div>
 
                 {/* RIGHT — Text content */}
@@ -1037,6 +985,10 @@ export default function HorizontalScroll() {
         @keyframes spin-reverse {
           from { transform: rotate(0deg); }
           to   { transform: rotate(-360deg); }
+        }
+        @keyframes blink-caret {
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
         }
       `}</style>
     </>
