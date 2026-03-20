@@ -51,10 +51,10 @@ function LoaderPanel({
 
     const timer = window.setTimeout(() => {
       setStep((prev) => {
-        if (prev >= safeSteps.length - 1) {
-          // Last step has been shown for its full duration → move to success
+        // If we're already at the last step (step 4, the 5th step), trigger success on next tick
+        if (prev === safeSteps.length - 1) {
           setPhase("success");
-          return prev;
+          return prev; // Stay on last step display until success takes over
         }
         return prev + 1;
       });
@@ -87,12 +87,12 @@ function LoaderPanel({
   }, [fireConfetti, infinite, phase]);
 
   const progressPercent =
-    phase === "success" ? 100 : ((step + 1) / safeSteps.length) * 100;
+    phase === "success" ? 100 : (step / safeSteps.length) * 100;
 
   return (
     <div
       ref={panelRef}
-      className="absolute left-[-0.5vw] bottom-[1vh] w-[20rem] rounded-[1.35rem] border px-5 py-5 backdrop-blur-xl transition-all duration-500"
+      className="absolute left-[3.5vw] bottom-[1vh] w-[20rem] rounded-[1.35rem] border px-5 py-5 backdrop-blur-xl transition-all duration-500"
       style={{
         borderColor: `${accent}35`,
         background: `linear-gradient(180deg, rgba(8,12,22,0.88), ${accent}18 110%)`,
