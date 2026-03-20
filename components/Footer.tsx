@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#0a0a0a] border-t border-white/5 py-16 px-8">
+    <footer className="bg-[#0a0a0a] border-t border-white/5 py-12 px-4 md:py-16 md:px-8">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-12">
         {/* Left */}
         <div className="flex flex-col gap-4">
@@ -18,7 +18,7 @@ export default function Footer() {
 
         {/* Center CTA */}
         <div className="flex flex-col gap-4">
-          <h3 className="text-white font-black text-2xl uppercase tracking-tight">
+          <h3 className="text-white font-black text-xl md:text-2xl uppercase tracking-tight">
             Ready to scale<br />new heights?
           </h3>
           <button className="self-start px-6 py-3 rounded-full bg-[#e63624] text-white text-sm font-bold uppercase tracking-widest hover:bg-white hover:text-[#e63624] transition-all duration-300">

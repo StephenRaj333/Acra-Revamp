@@ -56,3 +56,21 @@ body {
   background-size: 100% 100%; 
   pointer-events: none;
 } 
+
+@keyframes acraMarqueeForward {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes acraMarqueeReverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

@@ -152,6 +152,7 @@ const ScrollReveal = () => {
     const curRef = useRef(0);
     const animating = useRef(false);
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
     // SVG gradient stops
     const stop0Ref = useRef<SVGStopElement>(null);
@@ -171,6 +172,14 @@ const ScrollReveal = () => {
     const headlineRefs = useRef<(HTMLDivElement | null)[]>(Array<HTMLDivElement | null>(SLIDE_COUNT).fill(null));
 
     useEffect(() => {
+        const onResize = () => setIsMobile(window.innerWidth < 1024);
+        onResize();
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    }, []);
+
+    useEffect(() => {
+        if (isMobile !== false) return;
         // Set base angles for arms
         BASE_ANGLES.forEach((angle, ai) => {
             if (armRefs.current[ai]) gsap.set(armRefs.current[ai], { rotation: angle, transformOrigin: "0px 0px" });
@@ -230,7 +239,50 @@ const ScrollReveal = () => {
 
         return () => { st.kill(); bgVisibility.kill(); };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isMobile]);
+
+    if (isMobile === null) {
+        return null;
+    }
+
+    if (isMobile) {
+        return (
+            <section className="relative px-4 py-16 bg-[#050814]">
+                <div className="mx-auto max-w-2xl space-y-4">
+                    <h2 className="text-3xl font-black text-white">Our Services</h2>
+                    <p className="text-sm text-white/70">Everything you need to launch, scale, and communicate with impact.</p>
+                    {SLIDES.map((slide, si) => (
+                        <article
+                            key={si}
+                            className="rounded-2xl border border-white/10 p-4"
+                            style={{
+                                background: `linear-gradient(150deg, ${slide.g1}22, rgba(6, 10, 19, 0.96) 56%, rgba(3, 5, 11, 0.98))`,
+                            }}
+                        >
+                            <h3 className="text-2xl font-bold text-white leading-tight">
+                                {slide.headline[0]} <span className="text-white/75">{slide.headline[1]}</span>
+                            </h3>
+                            <div className="mt-3 grid grid-cols-3 gap-2">
+                                {slide.imgs.map((src, ii) => (
+                                    <div key={ii} className="relative h-20 overflow-hidden rounded-lg border border-white/10 bg-black/20">
+                                        <Image src={src} alt="service icon" fill sizes="(max-width: 768px) 30vw, 120px" className="object-contain p-2" />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="mt-4 space-y-2">
+                                {slide.products.map((p, pi) => (
+                                    <div key={pi} className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                                        <p className="text-sm font-semibold text-white">{p.name}</p>
+                                        <p className="mt-1 text-xs text-white/70">{p.hd}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            </section>
+        );
+    }
 
     function transition(from: number, to: number) {
         animating.current = true;

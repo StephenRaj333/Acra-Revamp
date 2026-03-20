@@ -12,22 +12,22 @@ export default function Navbar() {
       { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2 }
     );
   }, []);
-
+ 
   return (
     <nav
       ref={navRef}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-2.5 transition-colors duration-300 shadow-md bg-black/45 backdrop-blur-md"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 md:px-8 md:py-2.5 transition-colors duration-300 shadow-md bg-black/45 backdrop-blur-md"
 
     >
       {/* Logo */}
       <div className="flex items-center gap-2">
-        <img className="max-w-[120px]" src="https://static.tildacdn.one/tild3531-3636-4133-b766-646636616239/Group_11.png" alt="acra logo" />
+        <img className="max-w-[90px] md:max-w-[120px]" src="https://static.tildacdn.one/tild3531-3636-4133-b766-646636616239/Group_11.png" alt="acra logo" />
       </div>
 
       {/* Hamburger */}
       <button className="flex flex-col gap-[5px] group cursor-pointer">
-        <span className="block w-7 h-[2px] bg-white group-hover:w-5 transition-all duration-300" />
-        <span className="block w-5 h-[2px] bg-red-500 group-hover:w-7 transition-all duration-300" />
+        <span className="block w-6 md:w-7 h-[2px] bg-white group-hover:w-5 transition-all duration-300" />
+        <span className="block w-4 md:w-5 h-[2px] bg-red-500 group-hover:w-7 transition-all duration-300" />
       </button>
     </nav>
   );

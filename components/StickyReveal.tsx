@@ -503,7 +503,6 @@ export default function StickyReveal() {
 
     return () => {
       st.kill();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
       entrance.kill();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

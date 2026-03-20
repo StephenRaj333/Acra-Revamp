@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -30,6 +30,7 @@ const ORB_DOTS: DotSpec[] = [
 ];
 
 export default function Hero() {
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef   = useRef<HTMLElement>(null);
   const bgRef        = useRef<HTMLDivElement>(null);
   const bigARef      = useRef<HTMLDivElement>(null);
@@ -55,6 +56,14 @@ export default function Hero() {
   const scrollIndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
     const section = sectionRef.current!;
 
     const ctx = gsap.context(() => {
@@ -262,7 +271,42 @@ export default function Hero() {
       window.removeEventListener("mousemove", onMouseMove);
       section.removeEventListener("mouseleave", onMouseLeave);
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) {
+    return (
+      <section className="relative min-h-[92vh] overflow-hidden px-5 pb-14 pt-28" style={{ background: "linear-gradient(160deg, #2d0d06 0%, #1a0603 48%, #0b0302 100%)" }}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_24%,rgba(230,54,36,0.35),transparent_40%),radial-gradient(circle_at_78%_72%,rgba(230,54,36,0.2),transparent_42%)]" />
+        <div className="relative z-10 mx-auto max-w-xl text-left">
+          <p className="inline-flex items-center rounded-full border border-[#e6362460] bg-[#e636241a] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-white/70">
+            AKRA - Full Service Consultancy
+          </p>
+          <h1 className="mt-6 text-4xl font-black leading-[1.05] text-white">
+            Together, we
+            <span className="block text-[#e63624]">scale</span>
+            <span className="block text-white/85">new heights</span>
+          </h1>
+          <p className="mt-4 text-sm leading-relaxed text-white/70">
+            We bring together business strategy, design, and technology to help your company grow faster with clarity and confidence.
+          </p>
+          <div className="mt-6 grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-black/25 p-3">
+            <div>
+              <p className="text-xl font-black text-white">200+</p>
+              <p className="text-[10px] uppercase tracking-[0.14em] text-white/50">Brands Scaled</p>
+            </div>
+            <div>
+              <p className="text-xl font-black text-white">8 Yrs</p>
+              <p className="text-[10px] uppercase tracking-[0.14em] text-white/50">In Industry</p>
+            </div>
+            <div>
+              <p className="text-xl font-black text-white">50+</p>
+              <p className="text-[10px] uppercase tracking-[0.14em] text-white/50">Awards Won</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section

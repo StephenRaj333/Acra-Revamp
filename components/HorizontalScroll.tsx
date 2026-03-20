@@ -86,6 +86,7 @@ const AI_STACKED_CARDS = [
 export default function HorizontalScroll() {
   const containerRef    = useRef<HTMLDivElement>(null);
   const trackRef        = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [brandWordIndex, setBrandWordIndex] = useState(0);
   const [loaderIndex, setLoaderIndex] = useState(0);
@@ -106,6 +107,13 @@ export default function HorizontalScroll() {
   const travelerRef     = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
     const brandTimer = window.setInterval(() => {
       setBrandWordIndex((current) => (current + 1) % BRAND_WORDS.length);
     }, 1600);
@@ -121,10 +129,12 @@ export default function HorizontalScroll() {
   }, []);
 
   useEffect(() => {
-    // ── GSAP horizontal scroll ────────────────────────────────────────────
-    const track = trackRef.current!;
-    const panels = sectionRefs.current;
-    const totalWidth = track.scrollWidth - window.innerWidth;
+    if (isMobile !== false) return;
+    const ctx = gsap.context(() => {
+      // ── GSAP horizontal scroll ────────────────────────────────────────────
+      const track = trackRef.current!;
+      const panels = sectionRefs.current;
+      const totalWidth = track.scrollWidth - window.innerWidth;
 
     const mainTl = gsap.timeline({
       scrollTrigger: {
@@ -404,10 +414,42 @@ export default function HorizontalScroll() {
       }
     });
 
+    }, containerRef);
+
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ctx.revert();
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile === null) {
+    return null;
+  }
+
+  if (isMobile) {
+    return (
+      <section className="relative bg-[#090909] px-4 py-14">
+        <div className="mx-auto max-w-xl space-y-4">
+          <h2 className="text-3xl font-black leading-tight text-white">What we do</h2>
+          <p className="text-sm text-white/70">Simple, focused delivery across strategy, experience, and automation.</p>
+          {sections.map((section) => (
+            <article
+              key={section.id}
+              className="rounded-2xl border border-white/10 p-4"
+              style={{
+                background: `linear-gradient(140deg, ${section.gradientFrom}, ${section.gradientTo})`,
+              }}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: section.accent }}>
+                {section.tag}
+              </p>
+              <h3 className="mt-2 whitespace-pre-line text-2xl font-black leading-tight text-white">{section.heading}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/75">{section.sub}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>

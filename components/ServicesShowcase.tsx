@@ -38,9 +38,9 @@ function Card({ card }: { card: AcraCard }) {
         <motion.article
             whileHover={{ y: -8, scale: 1.012 }}
             transition={{ type: "spring", stiffness: 240, damping: 22 }}
-            className="group relative h-[17rem] w-[24rem] md:h-[19rem] md:w-[28rem] shrink-0 overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/5 shadow-[0_18px_45px_rgba(0,0,0,0.3)]"
+            className="group relative h-[14rem] w-[78vw] md:h-[19rem] md:w-[28rem] shrink-0 overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/5 shadow-[0_18px_45px_rgba(0,0,0,0.3)]"
         >
-            <Image src={card.thumbnail} alt={card.title} fill className="object-cover transition duration-500 group-hover:scale-110" />
+            <Image src={card.thumbnail} alt={card.title} fill sizes="(max-width: 768px) 78vw, 28rem" className="object-cover transition duration-500 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e1119]/80 via-[#111725]/35 to-transparent" />
             <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
             <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6">
@@ -53,7 +53,7 @@ function Card({ card }: { card: AcraCard }) {
 
 function ParallaxRow({ cards, x }: { cards: AcraCard[]; x: MotionValue<number> }) {
     return (
-        <motion.div style={{ x }} className="mb-6 flex gap-4 md:mb-8 md:gap-6">
+        <motion.div style={{ x }} className="mb-4 flex gap-3 md:mb-8 md:gap-6">
             {cards.map((card) => (
                 <Card key={`${card.title}-${card.caption}`} card={card} />
             ))}
@@ -79,7 +79,7 @@ export default function ServicesShowcase() {
     return (
         <section
             ref={ref}
-            className="relative overflow-hidden py-24 md:py-32"
+                        className="relative overflow-hidden py-16 md:py-32"
             style={{
               background: '#000'
             }}
