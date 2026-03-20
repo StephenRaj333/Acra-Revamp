@@ -54,7 +54,7 @@ function CardRotate({ children, onSendToBack, sensitivity, disableDrag }: CardRo
 
   return (
     <motion.div
-      className="absolute inset-0 cursor-grab"
+      className="absolute top-[-200px] inset-0 cursor-grab"
       style={{ x, y, rotateX, rotateY }}
       drag
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
@@ -78,7 +78,7 @@ function StackedCardsPanel({
   cards,
   randomRotation = false,
   sensitivity = 200,
-  sendToBackOnClick = true,
+  sendToBackOnClick = false,
   autoplay = true,
   autoplayDelay = 3000,
   pauseOnHover = false,
@@ -141,7 +141,7 @@ function StackedCardsPanel({
 
   return (
     <div
-      className="absolute left-[-0.5vw] bottom-[0vh] h-[15.5rem] w-[21rem]"
+      className="absolute left-[-0.5vw] bottom-[10vh] h-[5rem] w-[22rem]"
       onMouseEnter={() => pauseOnHover && setIsPaused(true)}
       onMouseLeave={() => pauseOnHover && setIsPaused(false)}
       style={{
