@@ -35,7 +35,6 @@ const SLIDES = [
         g1: "#FF4B31",
         g2: "#971809",
     },
-
     {
         headline: ["UI/UX", "Design"],
         products: [
@@ -61,7 +60,6 @@ const SLIDES = [
         g1: "#2F6DF6",
         g2: "#1633A1",
     },
-
     {
         headline: ["AI", "Driven"],
         products: [
@@ -87,12 +85,63 @@ const SLIDES = [
         g1: "#20C37C",
         g2: "#0E6A44",
     },
+    {
+    headline: ["Social", "Media"],
+    products: [
+        {
+            name: "Content Strategy",
+            hd: "Engaging content plans tailored for each platform"
+        },
+        {
+            name: "Social Campaigns",
+            hd: "Creative campaigns designed to boost reach & engagement"
+        },
+        {
+            name: "Community Management",
+            hd: "Building and nurturing loyal audience interactions"
+        },
+    ],
+    imgs: [ 
+        "/assets/images/sm-1.png",
+        "/assets/images/sm-2.png",
+        "/assets/images/sm-3.png",
+    ],
+    g0: "#FFD6F9",
+    g1: "#E843C4",
+    g2: "#8A1C73",
+},
+{
+    headline: ["Marketing", "Communication"],
+    products: [
+        {
+            name: "Brand Messaging",
+            hd: "Clear, consistent communication that defines your voice"
+        },
+        {
+            name: "Campaign Strategy",
+            hd: "Result-driven campaigns across digital & offline channels"
+        },
+        {
+            name: "Content Creation",
+            hd: "Compelling copy and visuals that drive conversions"
+        },
+    ],
+    imgs: [
+        "/assets/images/mc-1.png",
+        "/assets/images/mc-2.png",
+        "/assets/images/mc-3.png",
+    ],
+    g0: "#FFE7B3",
+    g1: "#FF9F1C",
+    g2: "#B86B00",
+}
 ];
 // Orbit config â€” 3 arms at 120Â° each, centered on the visible hex area
 const ORBIT_R = "8.89vw";     // vw radius of orbit circle
 const ORBIT_CX = "8.89vw";    // vw from sticky-wrapper left  (hex center)
 const ORBIT_CY = "8.89vw";    // vw from sticky-wrapper top   (hex center)
 const BASE_ANGLES = [-90, 30, 150]; // starting angles for the 3 orbit slots (degrees)
+const SLIDE_COUNT = SLIDES.length;
 
 const ScrollReveal = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -114,14 +163,12 @@ const ScrollReveal = () => {
     // 3 counter-rotate wrappers inside each arm (keep images upright)
     const counterRefs = useRef<(HTMLDivElement | null)[]>([null, null, null]);
     // imgRefs[arm][slide]
-    const imgRefs = useRef<(HTMLDivElement | null)[][]>([
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
-    ]);
+    const imgRefs = useRef<(HTMLDivElement | null)[][]>(
+        BASE_ANGLES.map(() => Array<HTMLDivElement | null>(SLIDE_COUNT).fill(null))
+    );
 
     // headlineRefs[slide]
-    const headlineRefs = useRef<(HTMLDivElement | null)[]>([null, null, null]);
+    const headlineRefs = useRef<(HTMLDivElement | null)[]>(Array<HTMLDivElement | null>(SLIDE_COUNT).fill(null));
 
     useEffect(() => {
         // Set base angles for arms
@@ -130,8 +177,8 @@ const ScrollReveal = () => {
             if (counterRefs.current[ai]) gsap.set(counterRefs.current[ai], { rotation: -angle });
         });
 
-        // Hide slides 1 & 2 on mount
-        [1, 2].forEach((si) => {
+        // Hide slides except first on mount
+        Array.from({ length: SLIDE_COUNT - 1 }, (_, idx) => idx + 1).forEach((si) => {
             if (headlineRefs.current[si]) gsap.set(headlineRefs.current[si], { opacity: 0, y: 44 });
             imgRefs.current.forEach((arm) => { if (arm[si]) gsap.set(arm[si], { opacity: 0 }); });
         });
@@ -159,10 +206,13 @@ const ScrollReveal = () => {
         const st = ScrollTrigger.create({
             trigger: wrapperRef.current,
             start: "top top",
-            end: "+=200%",
+            end: `+=${(SLIDE_COUNT - 1) * 100}%`,
             pin: stickyRef.current,
             onUpdate: (self) => {
-                const newIdx = self.progress < 0.34 ? 0 : self.progress < 0.67 ? 1 : 2;
+                const newIdx = Math.min(
+                    SLIDE_COUNT - 1,
+                    Math.floor(self.progress * SLIDE_COUNT)
+                );
                 if (newIdx !== curRef.current && !animating.current) {
                     transition(curRef.current, newIdx);
                     curRef.current = newIdx;
