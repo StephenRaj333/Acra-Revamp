@@ -54,11 +54,12 @@ function CardRotate({ children, onSendToBack, sensitivity, disableDrag }: CardRo
 
   return (
     <motion.div
-      className="absolute top-[-200px] inset-0 cursor-grab"
+      className="absolute inset-0 cursor-grab"
       style={{ x, y, rotateX, rotateY }}
       drag
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
-      dragElastic={0.6}
+      dragElastic={0.25}
+      dragMomentum={false}
       whileTap={{ cursor: "grabbing" }}
       onDragEnd={handleDragEnd}
     >
@@ -128,20 +129,23 @@ function StackedCardsPanel({
       return;
     }
     const interval = window.setInterval(() => {
-      const topCardId = stack[stack.length - 1]?.id;
-      if (typeof topCardId === "number") {
-        sendToBack(topCardId);
-      }
+      setStack((prev) => {
+        if (prev.length < 2) return prev;
+        const next = [...prev];
+        const [topCard] = next.splice(next.length - 1, 1);
+        next.unshift(topCard);
+        return next;
+      });
     }, autoplayDelay);
 
     return () => {
       window.clearInterval(interval);
     };
-  }, [autoplay, autoplayDelay, isPaused, stack]);
+  }, [autoplay, autoplayDelay, isPaused, stack.length]);
 
   return (
     <div
-      className="absolute left-[-0.5vw] bottom-[10vh] h-[5rem] w-[22rem]"
+      className="absolute left-[-0.5vw] bottom-[10vh] h-[18rem] w-[22rem]"
       onMouseEnter={() => pauseOnHover && setIsPaused(true)}
       onMouseLeave={() => pauseOnHover && setIsPaused(false)}
       style={{
@@ -168,15 +172,18 @@ function StackedCardsPanel({
                 }
               }}
               animate={{
-                rotateZ: (stack.length - index - 1) * 4 + randomRotate,
-                scale: 1 + index * 0.06 - stack.length * 0.06,
+                rotateZ: (stack.length - index - 1) * 2.6 + randomRotate,
+                scale: 1 + index * 0.05 - stack.length * 0.05,
+                y: (stack.length - index - 1) * -12,
+                x: (stack.length - index - 1) * -6,
+                opacity: 0.72 + index * 0.08,
                 transformOrigin: "90% 90%",
               }}
               initial={false}
               transition={{
-                type: "tween", 
-                stiffness: 260,
-                damping: 20,
+                type: "tween",
+                duration: 1.05,
+                ease: [0.22, 1, 0.36, 1],
               }}
               style={{
                 zIndex: index + 1,

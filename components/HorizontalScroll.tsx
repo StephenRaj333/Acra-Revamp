@@ -57,11 +57,12 @@ const sections = [
 const BRAND_WORDS = ["Identity", "Voice", "Recall", "Trust", "Momentum"];
 
 const LOADER_STEPS = [
-  "Discovery synced",
-  "Flows mapped",
-  "Prototype validated",
-  "System shipped",
-];
+  "User journey mapped",
+  "Wireframes approved",
+  "Design system aligned",
+  "Prototype usability tested",
+  "Interaction polish pass",
+]; 
 
 const AI_STACKED_CARDS = [
   {
@@ -120,7 +121,7 @@ export default function HorizontalScroll() {
 
     const loaderTimer = window.setInterval(() => {
       setLoaderIndex((current) => (current + 1) % LOADER_STEPS.length);
-    }, 1100);
+    }, 2100);
 
     return () => {
       window.clearInterval(brandTimer);
@@ -134,17 +135,18 @@ export default function HorizontalScroll() {
       // ── GSAP horizontal scroll ────────────────────────────────────────────
       const track = trackRef.current!;
       const panels = sectionRefs.current;
-      const totalWidth = track.scrollWidth - window.innerWidth;
+      const getTotalWidth = () => Math.max(0, track.scrollWidth - window.innerWidth);
 
     const mainTl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: () => `+=${totalWidth + window.innerWidth}`,
-        scrub: 1.2,
+        end: () => `+=${getTotalWidth()}`,
+        scrub: 0.9,
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
+        fastScrollEnd: true,
         onUpdate: (self) => {
           // active section detection
           const idx = Math.round(self.progress * (sections.length - 1));
@@ -194,7 +196,7 @@ export default function HorizontalScroll() {
 
     // horizontal drag
     mainTl.to(track, {
-      x: () => -totalWidth,
+      x: () => -getTotalWidth(),
       ease: "none",
     });
 
@@ -202,15 +204,14 @@ export default function HorizontalScroll() {
     if (travelerRef.current) {
       // Position: moves from 8vw to (300vw - 8vw) so it covers all panels
       gsap.to(travelerRef.current, {
-        x: () => totalWidth * 0.28,     // travels 28% of total horizontal distance
+        x: () => getTotalWidth() * 0.28,     // travels 28% of total horizontal distance
         y: "-=90",                      // arcs upward in the middle, back down at end
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: () => `+=${totalWidth + window.innerWidth}`,
+          end: () => `+=${getTotalWidth()}`,
           scrub: 1.0,
-          containerAnimation: mainTl,
         },
       });
       // Scale pulse: small → big → medium across 3 phases
@@ -315,9 +316,8 @@ export default function HorizontalScroll() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: `top top`,
-          end: () => `+=${totalWidth + window.innerWidth}`,
+          end: () => `+=${getTotalWidth()}`,
           scrub: 1.5,
-          containerAnimation: mainTl,
         },
       });
 
@@ -471,7 +471,7 @@ export default function HorizontalScroll() {
         <div
           ref={trackRef}
           className="flex h-full"
-          style={{ width: `${sections.length * 100}vw`, position: "relative" }}
+          style={{ width: `${sections.length * 100}vw`, position: "relative", willChange: "transform" }}
         >
          
           <div
@@ -876,6 +876,9 @@ export default function HorizontalScroll() {
                     <StackedCardsPanel
                       accent={section.accent}
                       cards={AI_STACKED_CARDS}
+                      autoplayDelay={5200} 
+                      pauseOnHover 
+                      sensitivity={260} 
                     />
                   )}
                 </div>

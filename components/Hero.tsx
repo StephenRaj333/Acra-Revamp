@@ -605,7 +605,7 @@ export default function Hero() {
               borderRadius: "50%",
               border: "1px dashed rgba(230,54,36,0.22)",
             }}>
-              {["B","R","A","N","D"].map((l, li) => {
+              {["B","R","A","N","D"]?.map((l, li) => {
                 const angle = (li / 5) * 2 * Math.PI - Math.PI / 2;
                 const r = 146;
                 return (
@@ -619,7 +619,9 @@ export default function Hero() {
                     boxShadow: "0 0 14px rgba(230,54,36,0.2)",
                     left: "50%", top: "50%",
                     transform: `translate(calc(-50% + ${Math.cos(angle) * r}px), calc(-50% + ${Math.sin(angle) * r}px))`,
-                  }}>{l}</div>
+                  }}>
+                    {l}
+                  </div>
                 );
               })}
             </div>

@@ -67,7 +67,7 @@ const acraMarqueeImages = [
 
 export default function ContactSection() {
   return (
-    <section className="relative mx-auto my-20 w-[min(94rem,96%)] overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#060c18] px-4 py-12 md:px-8 md:py-16">
+    <section className="relative mx-auto my-20 max-[768px]:my-0 w-[min(94rem,96%)] overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#060c18] px-4 py-12 md:px-8 md:py-16">
       <ThreeDMarquee className="pointer-events-none absolute inset-0 h-full w-full" images={acraMarqueeImages} />
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(47,109,246,0.26),transparent_40%),radial-gradient(circle_at_86%_72%,rgba(232,67,196,0.2),transparent_42%),linear-gradient(130deg,rgba(2,6,15,0.94),rgba(5,13,28,0.82))]" />

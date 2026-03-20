@@ -55,14 +55,7 @@ function LoaderPanel({
         boxShadow: `0 20px 52px ${accent}22`,
       }}
     >
-      <div className="flex items-center justify-between">
-        <p className="text-[0.68rem] font-bold uppercase tracking-[0.22em]" style={{ color: accent }}>
-          Multi-step Loader
-        </p>
-        <span className="text-[0.65rem] uppercase tracking-[0.18em] text-white/45">
-          {infinite ? "Infinite Loop" : "Sequence"}
-        </span>
-      </div>
+
 
       <div className="mt-3 h-[3px] w-full overflow-hidden rounded-full bg-white/10">
         <div

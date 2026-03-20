@@ -74,3 +74,14 @@ body {
     transform: translateX(0);
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .scene-container {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .scene-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
