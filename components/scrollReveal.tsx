@@ -4,6 +4,8 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ShootingStars } from "./ui/shooting-stars";
+import { StarsBackground } from "./ui/stars-background";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -134,6 +136,25 @@ const ScrollReveal = () => {
             imgRefs.current.forEach((arm) => { if (arm[si]) gsap.set(arm[si], { opacity: 0 }); });
         });
 
+        if (parallaxRef.current) {
+            gsap.set(parallaxRef.current, { autoAlpha: 0 });
+        }
+
+        const bgVisibility = ScrollTrigger.create({
+            trigger: wrapperRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            onToggle: (self) => {
+                if (!parallaxRef.current) return;
+                gsap.to(parallaxRef.current, {
+                    autoAlpha: self.isActive ? 0.55 : 0,
+                    duration: 0.3,
+                    ease: "power1.out",
+                    overwrite: true,
+                });
+            },
+        });
+
         // Sticky pin + scroll driver
         const st = ScrollTrigger.create({
             trigger: wrapperRef.current,
@@ -157,7 +178,7 @@ const ScrollReveal = () => {
             },
         });
 
-        return () => { st.kill(); ScrollTrigger.getAll().forEach((t) => t.kill()); };
+        return () => { st.kill(); bgVisibility.kill(); };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -240,9 +261,29 @@ const ScrollReveal = () => {
 
     return (
         <>
-            <div ref={wrapperRef} className="scroll-reveal-wrapper" style={{ minHeight: "300vh", paddingTop: "7.11vw" }}>
+            <div
+                ref={wrapperRef}
+                className="scroll-reveal-wrapper"
+                style={{ minHeight: "300vh", paddingTop: "7.11vw", position: "relative", overflow: "hidden" }}
+            >
+            
+                <div
+                    ref={parallaxRef}
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        height: "100vh",
+                        width: "100vw",
+                        zIndex: 0,
+                        pointerEvents: "none",
+                    }}
+                >
+                    <ShootingStars />
+                    <StarsBackground />
+                </div>
 
-                <div ref={stickyRef} className="sticky-wrapper  mx-auto relative max-w-[48vw] w-full" style={{ position: "sticky", top: "15vh" }}> 
+                <div ref={stickyRef} className="sticky-wrapper  mx-auto relative max-w-[48vw] w-full" style={{ position: "sticky", top: "15vh", zIndex: 2 }}> 
 
                     <div style={{
                         position: "absolute",
