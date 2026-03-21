@@ -1,7 +1,8 @@
 "use client";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { ThreeDMarquee } from "@/components/ui/3d-marquee";
+import { ShootingStars } from "@/components/ui/shooting-stars";
+import { StarsBackground } from "@/components/ui/stars-background";
 
 const World = dynamic(() => import("@/components/ui/globe").then((m) => m.World), {
   ssr: false,
@@ -47,30 +48,15 @@ const sampleArcs = [
   { order: 6, startLat: 25.276987, startLng: 55.296249, endLat: 19.076, endLng: 72.8777, arcAlt: 0.19, color: colors[2] },
 ];
 
-const acraMarqueeImages = [
-  "/assets/images/brand-1.webp",
-  "/assets/images/brand-2.webp",
-  "/assets/images/brand-3.webp",
-  "/assets/images/ui.png",
-  "/assets/images/ux.png",
-  "/assets/images/ui-ux.png",
-  "/assets/images/ai-1.webp",
-  "/assets/images/ai-2.webp",
-  "/assets/images/ai-3.webp",
-  "/assets/images/sm-1.png",
-  "/assets/images/sm-2.png",
-  "/assets/images/sm-3.png",
-  "/assets/images/mc-1.png",
-  "/assets/images/mc-2.png",
-  "/assets/images/mc-3.png",
-];
-
 export default function ContactSection() {
   return (
     <section className="relative mx-auto my-20 max-[768px]:my-0 w-[min(94rem,96%)] overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#060c18] px-4 py-12 md:px-8 md:py-16">
-      <ThreeDMarquee className="pointer-events-none absolute inset-0 h-full w-full" images={acraMarqueeImages} />
+      <div className="pointer-events-none absolute inset-0"> 
+        <ShootingStars />
+        <StarsBackground />
+      </div>
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(47,109,246,0.26),transparent_40%),radial-gradient(circle_at_86%_72%,rgba(232,67,196,0.2),transparent_42%),linear-gradient(130deg,rgba(2,6,15,0.94),rgba(5,13,28,0.82))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(47,109,246,0.15),transparent_40%),radial-gradient(circle_at_86%_72%,rgba(232,67,196,0.1),transparent_42%),linear-gradient(130deg,rgba(2,6,15,0.6),rgba(5,13,28,0.65))]" />
 
       <div className="relative z-10 grid items-center gap-8 md:grid-cols-[1.1fr_1fr]">
         <motion.div
@@ -100,8 +86,8 @@ export default function ContactSection() {
 
           <div className="mt-7 grid gap-3 text-left sm:grid-cols-2">
             <InfoPill label="Call Us" value="+91 98765 43210" />
-            <InfoPill label="Email" value="hello@acraagency.com" />
-            <InfoPill label="Business Hours" value="Mon - Sat, 9:30 AM to 7:00 PM" />
+            <InfoPill label="New Business" value="sales@akraconsultants.com" /> 
+            <InfoPill label="Partnership" value="krishnan@akraconsultants.com" />
             <InfoPill label="Location" value="Kolkata, India" />
           </div>
         </motion.div>

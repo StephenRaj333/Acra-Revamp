@@ -6,8 +6,27 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ShootingStars } from "./ui/shooting-stars";
 import { StarsBackground } from "./ui/stars-background";
+import { ThreeDMarquee } from "./ui/3d-marquee";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const acraMarqueeImages = [
+  "/assets/images/brand-1.webp",
+  "/assets/images/brand-2.webp",
+  "/assets/images/brand-3.webp",
+  "/assets/images/ui.png",
+  "/assets/images/ux.png",
+  "/assets/images/ui-ux.png",
+  "/assets/images/ai-1.webp",
+  "/assets/images/ai-2.webp",
+  "/assets/images/ai-3.webp",
+  "/assets/images/sm-1.png",
+  "/assets/images/sm-2.png",
+  "/assets/images/sm-3.png",
+  "/assets/images/mc-1.png",
+  "/assets/images/mc-2.png",
+  "/assets/images/mc-3.png",
+];
 
 const SLIDES = [
     {
@@ -381,6 +400,13 @@ const ScrollReveal = () => {
                         pointerEvents: "none",
                     }}
                 >
+                    <ThreeDMarquee className="pointer-events-none absolute inset-0 h-full w-full" images={acraMarqueeImages} />
+                    <div
+                        className="pointer-events-none absolute inset-0"
+                        style={{
+                            background: "radial-gradient(ellipse at 50% 50%, rgba(6, 12, 24, 0.8), rgba(2, 4, 10, 0.8))",
+                        }} 
+                    />
                     <ShootingStars />
                     <StarsBackground />
                 </div>
