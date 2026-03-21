@@ -481,7 +481,7 @@ const ScrollReveal = () => {
                                 background: `radial-gradient(circle at 92% 16%, ${SLIDES[currentSlide].g0}33, transparent 36%), radial-gradient(circle at 20% 90%, ${SLIDES[currentSlide].g1}22, transparent 34%)`,
                             }}
                         />
-                        <div className="pointer-events-none absolute inset-x-[3%] top-[3%] h-[0.06vw] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+                        <div className="hidden pointer-events-none absolute inset-x-[3%] top-[3%] h-[0.06vw] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
                         <div className="pointer-events-none absolute right-[2.2vw] top-[1.5vw] h-[6.2vw] w-[6.2vw] rounded-full border border-white/10" />
                         <div className="pointer-events-none absolute right-[2.9vw] top-[2.2vw] h-[4.8vw] w-[4.8vw] rounded-full border border-white/7" />
 
